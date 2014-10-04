@@ -1,0 +1,37 @@
+[user]
+	email = name@domail.com
+	name = My Name
+[gui]
+	recentrepo = C:/git/eproj
+
+[push]
+	default = simple
+ 
+[core]
+	editor = 'C:/Program Files (x86)/Notepad++/notepad++.exe' -nosession -multiInst -notabbar -noPlugin -ldiff
+	autocrlf = false
+ 
+[color]
+	ui = true
+ 
+[log]
+	decorate = short
+ 
+[alias]
+	sh = show
+	st = status
+	rb = rebase
+	mg = merge
+	mt = mergetool
+	ci = commit --verbose
+	co = checkout
+	br = branch
+	di = diff
+	dt = difftool
+	cp = cherry-pick
+	lol = log --graph --branches --remotes --pretty=oneline --abbrev-commit
+	lsh = log --graph --branches --remotes --pretty=short --abbrev-commit
+	g = grep --break --heading --line-number
+ 
+[grep]
+	lineNumber = true
