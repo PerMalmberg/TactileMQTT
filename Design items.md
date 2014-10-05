@@ -16,4 +16,6 @@
   Cache files to reduce server load.
   Output files needs to be minified.
   Serverside generator written in:
-    * Current options: Node.JS/ZMQ (http://zeromq.org/) or Python 3
+    * Current options:
+      * Node.JS/ZMQ (http://zeromq.org/)
+      * Python 3
