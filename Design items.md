@@ -12,6 +12,7 @@
 
 #Server backend
 * Use Bitnami Django Stack https://bitnami.com/stack/django
+  * Info on converting VMs to ESXi https://communities.vmware.com/people/Mike_Laverick/blog/2012/11/07/release-notes-vsphere51-vmkfstools-importsexports
 * Server generates complete page on request from client.
   Cache files to reduce server load.
   Output files needs to be minified.
