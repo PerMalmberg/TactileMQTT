@@ -18,5 +18,8 @@
   Output files needs to be minified.
   Serverside generator written in:
     * Current options:
-      * Node.JS/ZMQ (http://zeromq.org/)
+      * Node.JS/Mosca http://www.mosca.io/
       * Python 3
+
+# Random links
+ * http://zeromq.org/
