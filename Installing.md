@@ -1,2 +1,0 @@
-# Installation
-* Install Apache, NodeJS
