@@ -11,15 +11,14 @@
   Preferably a control should indicate a command is in progress instead of being completely disabled as that will give a more clear viewe of what is going on to the user.
 
 #Server backend
-* Use Bitnami Django Stack https://bitnami.com/stack/django
-  * Info on converting VMs to ESXi https://communities.vmware.com/people/Mike_Laverick/blog/2012/11/07/release-notes-vsphere51-vmkfstools-importsexports
-* Server generates complete page on request from client.
-  Cache files to reduce server load.
-  Output files needs to be minified.
-  Serverside generator written in:
-    * Current options:
-      * Node.JS/Mosca http://www.mosca.io/
+* Apache II Webserver
+* Serverside generator written in:
       * Python 3
 
 # Random links
- * http://zeromq.org/
+* JavaScript links
+  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Object_Model
+  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+* https://code.jquery.com/
+* http://requirejs.org/
+* http://zeromq.org/
