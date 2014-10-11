@@ -19,6 +19,7 @@
 * JavaScript links
   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Object_Model
   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+  * http://toddmotto.com/mastering-the-module-pattern/
 * https://code.jquery.com/
 * http://requirejs.org/
 * http://zeromq.org/
