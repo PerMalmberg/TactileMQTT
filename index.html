@@ -1,14 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 	<head>
-	    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 	    <title>Per's MQTT Test</title>
-	    <link rel="stylesheet" href="jquery-ui.min.css">
-		<script src="https://code.jquery.com/jquery-2.1.1.min.js"/>
-		<script src="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"/>
+	    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/black-tie/jquery-ui.css"/>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
+		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+		<!-- script type="text/javascript" src="script/requirejs/require.js"></script>
+		<script type="text/javascript" src="script/requirejs/domReady.js"></script>
 		<script type='text/javascript' src="http://www.hivemq.com/demos/websocket-client/js/mqttws31.js"></script>
-	</head>
-	<body>
+		<script type="text/javascript" src="/script/Loader.js"/></script-->
 
+		<script data-main="script/App" src="script/requirejs/require.js"></script>
+	</head>
+	<body>		
+		<div data-role="page" id="one">
+			<div data-role="header">
+				<h1>Header</h1>
+			</div>
+			<div role="main" class="ui-content">
+
+			</div>
+			<div data-role="footer">
+				<h4>Footer</h4>
+			</div></div>
 	</body>
 </html>
