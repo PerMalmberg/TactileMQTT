@@ -14,6 +14,7 @@ var MQTTBackend = (function() {
 	    var reconnectTimer = null;
 	    var myKeepAliveInterval = 60;
 	    var myStatusCallback = null;
+	    var myMessageCallback = null;
 
 	    var mySubscribedTopics = [];
 	    var myTotalMessageCount = 0;
@@ -23,10 +24,17 @@ var MQTTBackend = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-	    this.Start = function( statusCallback )
+	    this.Start = function( statusCallback, messageCallback )
 	    {
 			console.log( "Starting MQTT backend" );
-			myStatusCallback = statusCallback;
+
+			if( typeof statusCallback == "function" ) {
+				myStatusCallback = statusCallback;
+			}
+
+			if( typeof messageCallback == "function" ) {
+				myMessageCallback = messageCallback;
+			}
 
 			var cfgReader = new ConfigurationReader();
 			if( cfgReader.Read( "/conf/tactile.json" ) ) {
@@ -213,13 +221,17 @@ var MQTTBackend = (function() {
 		var MessageArrived = function( message )
 		{
 			++myTotalMessageCount;
+
+			if( myMessageCallback ) {
+				myMessageCallback( message.destinationName, message.payloadString );
+			}
+
 			ReportStatus();
-			// console.log( "Topic:"+ message.destinationName + " " + message.payloadString );
 		}
 
 		var ReportStatus = function()
 		{
-			if( typeof myStatusCallback == "function" ) {
+			if( myStatusCallback ) {
 				myStatusCallback( IsConnected(), myTotalMessageCount );
 			}
 		}

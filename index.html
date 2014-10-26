@@ -18,9 +18,13 @@
 				$( '#mqttStatus' ).text( msg );
 			}
 
+			function message( topic, data ) {
+				$( '#lastMessage').text( data );
+			}
+
 			$( document ).ready( function() {
 				var mqtt = MQTTBackend.Instance();
-				mqtt.Start( status );
+				mqtt.Start( status, message );
 				mqtt.Subscribe( "#" );
 			});
 		</script>
@@ -33,6 +37,7 @@
 			</div>
 			<div role="main" class="ui-content">
 				<p id="mqttStatus"/>
+				<p id="lastMessage"/>
 			</div>
 			<div data-role="footer">
 				<h4>Footer</h4>
