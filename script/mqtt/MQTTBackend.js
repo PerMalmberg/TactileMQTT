@@ -13,9 +13,9 @@ var MQTTBackend = (function() {
 	    var client = null;
 	    var reconnectTimer = null;
 	    var myKeepAliveInterval = 60;
-	    var myResponseMethod = null;
+	    var myStatusCallback = null;
 
-	    var myNotYetSubscribedTopics = [];
+	    var mySubscribedTopics = [];
 	    var myTotalMessageCount = 0;
 	    var myIsConnected = false;
 
@@ -23,18 +23,20 @@ var MQTTBackend = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-	    this.Start = function()
+	    this.Start = function( statusCallback )
 	    {
 			console.log( "Starting MQTT backend" );
+			myStatusCallback = statusCallback;
 
 			var cfgReader = new ConfigurationReader();
-			if( cfgReader.Read( "/conf/mqtt.json" ) ) {
+			if( cfgReader.Read( "/conf/tactile.json" ) ) {
 				myHost = cfgReader.GetString( 'mqtt', 'host', '127.0.0.1' );
 				myPort = cfgReader.GetNum( 'mqtt', 'port', 8000 );
 				myUserName = cfgReader.GetString( 'mqtt', 'user', null );
 				myPassword = cfgReader.GetString( 'mqtt', 'password', null );
 				myTimeout = cfgReader.GetNum( 'mqtt', 'connectionTimeout', 10 );
 				myKeepAliveInterval = cfgReader.GetNum( 'mqtt', 'keepAliveInterval', 5 );
+
 				AttemptConnection();
 			}
 			else {
@@ -80,12 +82,13 @@ var MQTTBackend = (function() {
 					console.log( "Failed to subscribe" );
 					Disconnect();
 					SetupReconnect();
-					myNotYetSubscribedTopics.push( topic );
 				}
 			}
-			else {
-				myNotYetSubscribedTopics.push( topic );
-			}
+			
+			// Add topic, if not already present
+			if( mySubscribedTopics.indexOf( topic ) === -1 ) {
+				mySubscribedTopics.push( topic );
+			}			
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -144,11 +147,13 @@ var MQTTBackend = (function() {
 				try {
 					client.disconnect();
 					clearInterval( reconnectTimer );
+					mySubscribedTopics.length = 0;
 				}
 				catch( err ) {
 					console.log( "Disconnection failed: " + err );
 				}
 			}
+			ReportStatus();
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -161,6 +166,7 @@ var MQTTBackend = (function() {
 				clearInterval( reconnectTimer );
 			}
 			reconnectTimer = setInterval( AttemptConnection, 3000 );
+			ReportStatus();
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -172,8 +178,9 @@ var MQTTBackend = (function() {
 			console.log( "Connected" );
 			myTotalMessageCount = 0;
 			myIsConnected = true;
-			while( myNotYetSubscribedTopics.length > 0 ) {
-				client.subscribe( myNotYetSubscribedTopics.pop(), { qos: 2} );
+			ReportStatus();
+			for( var i = 0; i < mySubscribedTopics.length; ++i ) {
+				client.subscribe( mySubscribedTopics[i], { qos: 2} );
 			}
 		}
 		
@@ -206,15 +213,28 @@ var MQTTBackend = (function() {
 		var MessageArrived = function( message )
 		{
 			++myTotalMessageCount;
-			console.log( "onMessageArrived:"+ message.payloadString );
+			ReportStatus();
+			// console.log( "Topic:"+ message.destinationName + " " + message.payloadString );
 		}
 
+		var ReportStatus = function()
+		{
+			if( typeof myStatusCallback == "function" ) {
+				myStatusCallback( IsConnected(), myTotalMessageCount );
+			}
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
 		var IsConnected = function()
 		{
 			return client && myIsConnected;
 		}
 	};
 
+	// Return the same instance each time - singelton
 	return {
 		Instance : function() {
 			if( !myInstance ) {
