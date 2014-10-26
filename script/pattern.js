@@ -1,20 +1,3 @@
-// Load jQuery and jQuery Mobile. See App.js
-require(["jquery", "MQTTBackend"], function( $, mqtt ) {
-    // The plugins has loaded.
-
-    $().ready( DomReady );
-
-	function DomReady()
-	{
-		console.log( "DOM has loaded" );
-		
-	}
-});
-
-
-
-
-
 // http://web.archive.org/web/20080509080159/http://www.crockford.com/javascript/private.html
 /*
 Public
@@ -46,4 +29,9 @@ Privileged
 function Constructor(...) {
 this.membername = function (...) {...};
 }
+
+https://gist.github.com/jonnyreeves/2474026
+http://stackoverflow.com/questions/944273/how-to-declare-a-global-variable-in-a-js-file
+
 */
+

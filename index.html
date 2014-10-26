@@ -7,13 +7,16 @@
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
 		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
-		<!-- script type="text/javascript" src="script/requirejs/require.js"></script>
-		<script type="text/javascript" src="script/requirejs/domReady.js"></script>
-		<script type='text/javascript' src="http://www.hivemq.com/demos/websocket-client/js/mqttws31.js"></script>
-		<script type="text/javascript" src="/script/Loader.js"/></script-->
-
-		<script data-main="script/App" src="script/requirejs/require.js"></script>
+		<script src="script/mqtt/mqttws31.js"></script>
+		<script src="script/mqtt/MQTTBackend.js"></script>
+		<script type="text/javascript">
+			$( document ).ready( function() {
+				var mqtt = new MQTTBackend();
+				mqtt.Start();
+			});
+		</script>
 	</head>
+
 	<body>		
 		<div data-role="page" id="one">
 			<div data-role="header">
