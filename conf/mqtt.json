@@ -1,10 +1,11 @@
-// Connection details for MQTTBackend
 {
+	"comment": "Connection details for MQTTBackend",
 	"mqtt": {
 		"host": "broker.mqtt-dashboard.com",
 		"port": 8000,
 		"user": "",
 		"password": "",
-		"timeout": 10
+		"connectionTimeout": 10,
+		"keepAliveInterval": 5
 	}	
 }
