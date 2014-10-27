@@ -39,22 +39,22 @@
 	</head>
 
 	<body>		
-		<div data-role="page" id="startupPage" data-title="Loding TactileMQTT">
+		<div data-role="page" id="startupPage" data-title="Loading TactileMQTT">
 			<!-- This is the page that will be displayed while the UI is being created. -->
 			<div role="content" class="ui-content" data-title="Loading...">
 				<p>Loading TactileMQTT UI...</p>
 			</div>			
 		</div>
 		<!-- Additional pages will be created from the configuration -->
-		<div data-role="page" id="myLandingPage">
+				
+		
+		<!-- Template data. Must not contain id-attributes as it is cloned at run-time. -->
+		<div data-role="page" class="templatePage">
 			<div data-role="header">
 				<h1>Header</h1>
 			</div>
-			<div role="content" class="ui-content" id="main-content">
-				<form>
-				    <label for="flip-checkbox-1">Flip toggle switch checkbox:</label>
-				    <input type="checkbox" data-role="flipswitch" name="flip-checkbox-1" id="flip-checkbox-1">
-				</form>
+			<div role="content" class="ui-content">
+				
 			</div>
 			
 			<div data-role="footer">

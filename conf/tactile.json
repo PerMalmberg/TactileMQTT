@@ -14,33 +14,25 @@
 	"page": {
 		"landingPage" : "myLandingPage",
 		"pages" : 
-			[ 
-				{ "myLandingPage" : 
+		[ 
+			{ 
+				"pageName" : "myLandingPage",
+				"elements" : 
+				[ 
 					{
-					"elements" : 
-						[ 
-							{
-								"Flipswitch" : 
-								{
-									"properties" : 
-									{
-										"data-on-text": "Switch on",
-										"data-off-text": "Switch off",
-										"mini": false,
-										"mqtt-topic": "TactileMQTT/myTopic",
-										"X" : 150,
-										"Y": 200
-									}
-								} 
-							}
-						]
-				}
-			},
-			{ "secondPage" : 
-				{
-
-				}
-			}
+						"type" : "Flipswitch",
+						"properties" :
+						{
+							"data-on-text": "Switch on",
+							"data-off-text": "Switch off",
+							"mini": false,
+							"mqtt-topic": "TactileMQTT/myTopic",
+							"X" : 150,
+							"Y": 200
+						}						 
+					}
+				]				
+			}			
 		]
 	}
 }

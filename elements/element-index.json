@@ -1,7 +1,10 @@
 {
 	"elements":
 		[
-			{ "Flipswitch": "flipSwitch.json" }
+			{ 
+				"ElementName" : "Flipswitch",
+				"Template" : "flipSwitch.json"
+			}
 			
 		]
 }

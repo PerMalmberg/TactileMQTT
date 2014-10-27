@@ -11,7 +11,8 @@ var UICreator = (function() {
 	function UICreatorConstructor() {
 	
 		var elementsCreated = false;
-		var myCfg = new ConfigurationReader();		
+		var myCfg = new ConfigurationReader();
+		var myElements = [];
 
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
@@ -23,10 +24,48 @@ var UICreator = (function() {
 			if( !elementsCreated ) {
 				elementsCreated = true;
 
-				if( ReadConfig() ) {
+				if( ReadConfig() ) {					
+					var templateReader = new ConfigurationReader();
+					var pages = myCfg.GetPath( "page.pages" );
+					for( var currPage = 0; currPage < pages.length; ++currPage ) {
+						CreatePage( pages[currPage], templateReader );
+					}
+
 					BindEvents();
 					EnableUI();	
 				}				
+			}
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var CreatePage = function( pageData, templateReader )
+		{
+			if( pageData.pageName && pageData.elements ) {
+				var pageName = pageData.pageName;
+				
+				// Create a duplicate of the template located in our DOM.
+				var divPage = $( ".templatePage" ).clone();
+				// Remove class used to find the div
+				divPage.removeClass( "templatePage" );
+				// Set the id attribute so it can be navigated to.
+				divPage.attr( "id", pageName );
+				
+				// Loop the elements, and find each template.
+				for( var i = 0; i < pageData.elements.length; ++i ) {
+					var currElem = pageData.elements[i];
+					var type = currElem.type;
+					var prop = currElem.properties;
+					//http://stackoverflow.com/questions/6643412/how-can-i-clone-modify-and-prepend-an-element-with-jquery					
+				}
+				
+				// Append this page to the DOM.
+				$("body").append( divPage );	
+			}
+			else {
+				console.log( "Page does not contain pageName and/or elements" );
 			}
 		}
 
@@ -52,7 +91,7 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////		
 		var BindEvents = function()
 		{
-			// Bind eventhandler for all checkboxes
+			// Bind event handler for all checkboxes
 			$('form').on('change', ':checkbox', CheckBoxChange );
 		}
 
@@ -64,16 +103,29 @@ var UICreator = (function() {
 		{
 			var res = false;
 
-			if( myCfg.Read( "/conf/tactile.json" ) ) {
-				// Get the JQMobile page we're going to show when all things are done.
-				myLandingPage = "#" + myCfg.GetString( "page", "landingPage" );
-
-				var page = myCfg.GetPath( "page.pages" );
-				for( var currPage = 0; currPage < page.length; ++currPage ) {
-					console.log( page[currPage] );
+			if( myCfg.Read( "/elements/element-index.json" ) ) {
+				var elementContainer = myCfg.GetPath( "elements" );		
+				
+				if( elementContainer && elementContainer.length > 0 ) {		
+									
+					for( var i = 0; i < elementContainer.length; ++i ) {
+						var element = elementContainer[i];
+						myElements.push( element );						
+					}
+				
+					if( myCfg.Read( "/conf/tactile.json" ) ) {
+						// Get the page we're going to show when all things are done.
+						myLandingPage = "#" + myCfg.GetString( "page", "landingPage" );
+	
+						res = true;
+					}
 				}
-
-				res = true;
+				else {
+					console.log( "No elements could be found" );
+				}
+			}
+			else {
+				console.log( "Could not read configuration" );
 			}
 
 			return res;
