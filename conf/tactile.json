@@ -1,11 +1,46 @@
 {
+	"configurationCheck" : {
+		"interval": 15
+	},
 	"mqtt": {
-		"comment": "Connection details for MQTT backend",
+		"comment": "Connection details for MQTT backend. Leave user and passwords blank if not used",
 		"host": "broker.mqtt-dashboard.com",
 		"port": 8000,
 		"user": "",
 		"password": "",
 		"connectionTimeout": 10,
 		"keepAliveInterval": 5
+	},
+	"page": {
+		"landingPage" : "myLandingPage",
+		"pages" : 
+			[ 
+				{ "myLandingPage" : 
+					{
+					"elements" : 
+						[ 
+							{
+								"Flipswitch" : 
+								{
+									"properties" : 
+									{
+										"data-on-text": "Switch on",
+										"data-off-text": "Switch off",
+										"mini": false,
+										"mqtt-topic": "TactileMQTT/myTopic",
+										"X" : 150,
+										"Y": 200
+									}
+								} 
+							}
+						]
+				}
+			},
+			{ "secondPage" : 
+				{
+
+				}
+			}
+		]
 	}
 }

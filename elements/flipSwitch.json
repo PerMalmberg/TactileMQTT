@@ -1,0 +1,34 @@
+{
+	"Flipswitch" : {
+		"html" : 
+			"<form>
+	    		<input type=\"checkbox\" data-role=\"flipswitch\" name=\"flip-checkbox-{name}\" id=\"flip-checkbox-{name}\" data-on-text=\"Light\" data-off-text=\"Dark\" data-wrapper-class=\"custom-label-flipswitch\">
+			</form>",
+		"properties" : {
+			"data-on-text" : {
+				"desc" : "Text to show when on",
+				"type" : "string"
+			},
+			"data-off-text" : { 
+				"desc" : "Text to show when off",
+				"type" : "string"
+			},
+			"mini" : { 
+				"desc" : "Mini-version",
+				"type" : "bool"
+			},
+			"mqtt-topic" : {
+				"desc" : "MQTT Topic",
+				"type" : "string"
+			},
+			"X" : { 
+				"desc" : "Left coordinate",
+				"type" : "string"
+			},
+			"Y" : { 
+				"desc" : "Top coordinate",
+				"type" : "string"
+			}
+		}
+	}
+}
