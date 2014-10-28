@@ -17,23 +17,33 @@
 		<!-- The MQTT related scripts -->
 		<script src="script/mqtt/mqttws31.js"></script>		
 		<script src="script/MQTTBackend.js"></script>
+		<script src="script/MQTTBinder.js"></script>
 
 		<!-- Get things started -->
 		<script type="text/javascript">
+			var MQTTReveived = function( topic, message )
+			{
 			
-			$(window).load( function() {
+			}						
+						
+			$(window).ready( function() {
 				// Start MQTT backend
 				$( document ).ready( function() {
 					var cfg = new ConfigurationReader();
 					if( cfg.Read( "/conf/tactile.json", true ) ) {
+						var binder = MQTTBinder.Instance();
 						var mqtt = MQTTBackend.Instance();
-						mqtt.Start( cfg );
+						
+						// Place the elements based on configuration
+						var uic = UICreator.Instance();
+						uic.BuildPages();										
+						// Bind elements to their subscription
+						binder.Bind();					
+						
+						mqtt.Start( cfg, null, binder.HandleMessage );
+						
 						mqtt.Subscribe( "#" );
 					}
-
-					// Place the elements based on configuration
-					var uic = UICreator.Instance();
-					uic.BuildPages();
 				});			
 			} );
 		</script>

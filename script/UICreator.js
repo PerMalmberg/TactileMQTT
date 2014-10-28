@@ -109,8 +109,8 @@ var UICreator = (function() {
 				if( positionElement.length ) {			
 					if( element ) {
 						// Remove all classes
-						positionElement.removeClass();
-						element.removeClass();
+						positionElement.removeClass( "tactilePosition" );
+						element.removeClass( "tactileElement" );
 						// Set id based on page name and configured id.
 						positionElement.attr( "id", pageName + "-position-" + elementConfig.properties.id ); 
 						element.attr( "id", pageName + "-" + elementConfig.properties.id ); 				
