@@ -32,6 +32,7 @@ var UICreator = (function() {
 					}
 
 					BindEvents();
+					
 					EnableUI();	
 				}				
 			}
@@ -52,17 +53,20 @@ var UICreator = (function() {
 				divPage.removeClass( "templatePage" );
 				// Set the id attribute so it can be navigated to.
 				divPage.attr( "id", pageName );
+				// Set page title
 				divPage.attr( "data-title", pageData.pageTitle );
-				// Append this page to the DOM.
+				// Append this page to the DOM so we can work with it using jQuery
 				$("body").append( divPage );
 				
 				// Loop the elements, and find each template.
 				for( var i = 0; i < pageData.elements.length; ++i ) {
 					var currElem = pageData.elements[i];
 						
+					// Search for the template data files.
 					var templateFile = FindElementTemplate( currElem.type );
 					
 					if( templateFile ) {
+						
 						if( templateReader.Read( "/elements/" + templateFile ) ) {
 							var template = templateReader.GetPath( currElem.type );
 							if( template ) {
@@ -71,7 +75,7 @@ var UICreator = (function() {
 						}
 					}
 					else {
-						console.log( "Could not find a match for element type " + type );
+						console.log( "Could not find a matching for template file for element type '" + type + "'" );
 					}
 				}	
 			}

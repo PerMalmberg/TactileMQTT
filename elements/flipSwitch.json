@@ -1,7 +1,7 @@
 {
 	"flipswitch" : {
 		"html" : 
-			"<div class=\"tactilePosition\"><input class=\"tactileElement\" type=\"checkbox\" data-role=\"flipswitch\"></div>",
+			"<form><input class=\"tactileElement\" type=\"checkbox\" data-role=\"flipswitch\"></form>",
 		"properties" : {
 			"data-on-text" : {
 				"desc" : "Text to show when on",
