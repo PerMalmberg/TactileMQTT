@@ -1,33 +1,42 @@
 {
-	"Flipswitch" : {
+	"flipswitch" : {
 		"html" : 
-			"<form>
-	    		<input type=\"checkbox\" data-role=\"flipswitch\" name=\"flip-checkbox-{name}\" id=\"flip-checkbox-{name}\" data-on-text=\"Light\" data-off-text=\"Dark\" data-wrapper-class=\"custom-label-flipswitch\">
-			</form>",
+			"<div class=\"tactilePosition\"><input class=\"tactileElement\" type=\"checkbox\" data-role=\"flipswitch\"></div>",
 		"properties" : {
 			"data-on-text" : {
 				"desc" : "Text to show when on",
-				"type" : "string"
+				"type" : "string",
+				"default" : "On"
 			},
 			"data-off-text" : { 
 				"desc" : "Text to show when off",
-				"type" : "string"
+				"type" : "string",
+				"default" : "Off"
 			},
-			"mini" : { 
+			"data-mini" : { 
 				"desc" : "Mini-version",
-				"type" : "bool"
+				"type" : "bool",
+				"default" : "false"
+				
 			},
 			"mqtt-topic" : {
 				"desc" : "MQTT Topic",
-				"type" : "string"
-			},
-			"X" : { 
+				"type" : "string",
+				"default" : ""
+			}
+		},
+		"position" : {
+			"top" : { 
 				"desc" : "Left coordinate",
-				"type" : "string"
+				"type" : "int",
+				"default" : "0",
+				"suffixValue" : "px;"
 			},
-			"Y" : { 
+			"left" : { 
 				"desc" : "Top coordinate",
-				"type" : "string"
+				"type" : "int",
+				"default" : "0",
+				"suffixValue" : "px;"
 			}
 		}
 	}

@@ -52,23 +52,113 @@ var UICreator = (function() {
 				divPage.removeClass( "templatePage" );
 				// Set the id attribute so it can be navigated to.
 				divPage.attr( "id", pageName );
+				divPage.attr( "data-title", pageData.pageTitle );
+				// Append this page to the DOM.
+				$("body").append( divPage );
 				
 				// Loop the elements, and find each template.
 				for( var i = 0; i < pageData.elements.length; ++i ) {
 					var currElem = pageData.elements[i];
-					var type = currElem.type;
-					var prop = currElem.properties;
-					//http://stackoverflow.com/questions/6643412/how-can-i-clone-modify-and-prepend-an-element-with-jquery					
-				}
-				
-				// Append this page to the DOM.
-				$("body").append( divPage );	
+						
+					var templateFile = FindElementTemplate( currElem.type );
+					
+					if( templateFile ) {
+						if( templateReader.Read( "/elements/" + templateFile ) ) {
+							var template = templateReader.GetPath( currElem.type );
+							if( template ) {
+								CreateElement( pageName, template, currElem );
+							}
+						}
+					}
+					else {
+						console.log( "Could not find a match for element type " + type );
+					}
+				}	
 			}
 			else {
 				console.log( "Page does not contain pageName and/or elements" );
 			}
 		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var CreateElement = function( pageName, template, elementConfig )
+		{
+			// Get the div with the class 'ui-content' we're supposed to work on.
+			var page = $( "#" + pageName ).find( ".ui-content" );
+			if( page ) {
+				// Create a dom object and insert it into the page
+				page.append( $.parseHTML( template.html ) );
+				// Find the newly added element by class.
+				var positionElement = $( ".tactilePosition" );
+				var element = $( ".tactileElement" );
+				// Remove all classes
+				positionElement.removeClass();
+				element.removeClass();
+				// Set id based on page name and configured id.
+				positionElement.attr( "id", pageName + "-position-" + elementConfig.properties.id ); 
+				element.attr( "id", pageName + "-" + elementConfig.properties.id ); 				
+				ApplyDefaultProperties( element, template.properties );
+				ApplyConfiguredProperties( element, elementConfig.properties );
+				ApplyPosition( positionElement, elementConfig.position );
+			}
+			else {
+				console.log( "Could not find a div with class 'ui-content' in page '" + pageName + "'" ); 
+			}	
+		}
 
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var ApplyDefaultProperties = function( element, props ) 
+		{
+			for( var key in props ) {
+				element.attr( key, props[key].default );
+			}			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var ApplyConfiguredProperties = function( element, props ) 
+		{
+			for( var key in props ) {
+				element.attr( key, props[key] );
+			}			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var ApplyPosition = function( element, position )
+		{
+			// All elements are placed using fixed positioning
+			element.css( position );
+			element.css( "position", "fixed" );
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var FindElementTemplate = function( typeName )
+		{
+			var res = null;
+			
+			for( var i = 0; !res && i < myElements.length; ++i ) {
+				if( myElements[i].elementName == typeName ) {
+					res = myElements[i].template;
+				}
+			}
+			
+			return res;
+		}
+		
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
@@ -109,8 +199,7 @@ var UICreator = (function() {
 				if( elementContainer && elementContainer.length > 0 ) {		
 									
 					for( var i = 0; i < elementContainer.length; ++i ) {
-						var element = elementContainer[i];
-						myElements.push( element );						
+						myElements.push( elementContainer[i] );						
 					}
 				
 					if( myCfg.Read( "/conf/tactile.json" ) ) {

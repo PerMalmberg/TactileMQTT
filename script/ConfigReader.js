@@ -143,9 +143,6 @@ function ConfigurationReader() {
             			console.log( "Configuration updated, reloading page." );
 						window.location.reload( true );
             		}
-            		else {
-            			console.log( "not changed");
-            		}
         		}
     		}
     	);

@@ -17,19 +17,21 @@
 		[ 
 			{ 
 				"pageName" : "myLandingPage",
+				"pageTitle" : "TactileMQTT Demo",
 				"elements" : 
 				[ 
 					{
-						"type" : "Flipswitch",
+						"type" : "flipswitch",
 						"properties" :
-						{
-							"data-on-text": "Switch on",
-							"data-off-text": "Switch off",
-							"mini": false,
-							"mqtt-topic": "TactileMQTT/myTopic",
-							"X" : 150,
-							"Y": 200
-						}						 
+						{					
+							"id" : "mySwitch",
+							"data-mini": false,
+							"mqtt-topic": "TactileMQTT/myTopic"							
+						},
+						"position" : {
+							"top" : 150,
+							"left": 500
+						}						
 					}
 				]				
 			}			
