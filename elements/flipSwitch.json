@@ -1,7 +1,7 @@
 {
 	"flipswitch" : {
 		"html" : 
-			"<form><input class=\"tactileElement\" type=\"checkbox\" data-role=\"flipswitch\"></form>",
+			"<div class=\"tactilePosition\"><input class=\"tactileElement\" type=\"checkbox\" data-role=\"flipswitch\"></div>",
 		"properties" : {
 			"data-on-text" : {
 				"desc" : "Text to show when on",
@@ -38,6 +38,9 @@
 				"default" : "0",
 				"suffixValue" : "px;"
 			}
+		},
+		"mqttbinding" : {
+
 		}
 	}
 }

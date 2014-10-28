@@ -95,18 +95,30 @@ var UICreator = (function() {
 			if( page ) {
 				// Create a dom object and insert it into the page
 				page.append( $.parseHTML( template.html ) );
-				// Find the newly added element by class.
+				// Find the newly added element by class
+				// Can we create the positioning element in code instead, it would simplify the element templates.
 				var positionElement = $( ".tactilePosition" );
 				var element = $( ".tactileElement" );
-				// Remove all classes
-				positionElement.removeClass();
-				element.removeClass();
-				// Set id based on page name and configured id.
-				positionElement.attr( "id", pageName + "-position-" + elementConfig.properties.id ); 
-				element.attr( "id", pageName + "-" + elementConfig.properties.id ); 				
-				ApplyDefaultProperties( element, template.properties );
-				ApplyConfiguredProperties( element, elementConfig.properties );
-				ApplyPosition( positionElement, elementConfig.position );
+				
+				if( positionElement.length ) {			
+					if( element ) {
+						// Remove all classes
+						positionElement.removeClass();
+						element.removeClass();
+						// Set id based on page name and configured id.
+						positionElement.attr( "id", pageName + "-position-" + elementConfig.properties.id ); 
+						element.attr( "id", pageName + "-" + elementConfig.properties.id ); 				
+						ApplyDefaultProperties( element, template.properties );
+						ApplyConfiguredProperties( element, elementConfig.properties );
+						ApplyPosition( positionElement, elementConfig.position );
+					}
+					else {
+						console.log( "No element with class '" + tactileElement + "' found while creating element of type '" + elementConfig.type + "'" );
+					}
+				}
+				else {
+					console.log( "No position element found for element id '" + elementConfig.properties.id + "', type '" + elementConfig.type + "'" );
+				}
 			}
 			else {
 				console.log( "Could not find a div with class 'ui-content' in page '" + pageName + "'" ); 
