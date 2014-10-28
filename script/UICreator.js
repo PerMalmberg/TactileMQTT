@@ -26,9 +26,10 @@ var UICreator = (function() {
 
 				if( ReadConfig() ) {					
 					var templateReader = new ConfigurationReader();
+					var htmlReader = new HTMLReader();
 					var pages = myCfg.GetPath( "page.pages" );
 					for( var currPage = 0; currPage < pages.length; ++currPage ) {
-						CreatePage( pages[currPage], templateReader );
+						CreatePage( pages[currPage], templateReader, htmlReader );
 					}
 			
 					EnableUI();	
@@ -40,7 +41,7 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var CreatePage = function( pageData, templateReader )
+		var CreatePage = function( pageData, templateReader, htmlReader )
 		{
 			if( pageData.pageName && pageData.elements ) {
 				var pageName = pageData.pageName;
@@ -61,14 +62,21 @@ var UICreator = (function() {
 					var currElem = pageData.elements[i];
 						
 					// Search for the template data files.
-					var templateFile = FindElementTemplate( currElem.type );
+					var templateData = FindElementTemplate( currElem.type );
 					
-					if( templateFile ) {
-						
-						if( templateReader.Read( "/elements/" + templateFile ) ) {
-							var template = templateReader.GetPath( currElem.type );
-							if( template ) {
-								CreateElement( pageName, template, currElem );
+					if( templateData ) {						
+						if( templateReader.Read( "/elements/" + templateData.template ) ) {
+							if( htmlReader.Read( "/elements/" + templateData.htmlTemplate ) ) {
+								var template = templateReader.GetPath( currElem.type );
+								if( template ) {
+									CreateElement( pageName, template, htmlReader.Get(), currElem );
+								}
+								else {
+									console.log( "Could not read HTML template for '" + type + "'" );
+								}
+							}
+							else {
+								console.log( "Could not read template for '" + type + "'" );
 							}
 						}
 					}
@@ -86,13 +94,13 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var CreateElement = function( pageName, template, elementConfig )
+		var CreateElement = function( pageName, template, htmlTemplate, elementConfig )
 		{
 			// Get the div with the class 'ui-content' we're supposed to work on.
 			var page = $( "#" + pageName ).find( ".ui-content" );
 			if( page ) {
 				// Create a dom object and insert it into the page
-				page.append( $.parseHTML( template.html ) );
+				page.append( $.parseHTML( htmlTemplate, true ) );
 				// Find the newly added element by class
 				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
 				var positionElement = $( ".tactilePosition" );
@@ -166,7 +174,7 @@ var UICreator = (function() {
 			
 			for( var i = 0; !res && i < myElements.length; ++i ) {
 				if( myElements[i].elementName == typeName ) {
-					res = myElements[i].template;
+					res = myElements[i];
 				}
 			}
 			

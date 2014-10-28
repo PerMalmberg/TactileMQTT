@@ -3,7 +3,8 @@
 	[
 		{ 
 			"elementName" : "flipswitch",
-			"template" : "flipSwitch.json"
+			"template" : "flipSwitch.json",
+			"htmlTemplate" : "flipSwitch.html"
 		}			
 	]
 }

@@ -49,7 +49,7 @@ var MQTTBackend = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		this.Send = function( topic, message )
+		this.Publish = function( topic, message )
 		{
 			if( IsConnected() ) {
 				try {

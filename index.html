@@ -10,6 +10,7 @@
 
 		<!-- Next, the configuration reader is utilized by all over, so add it next -->
 		<script src="script/ConfigReader.js"></script>
+		<script src="script/HTMLReader.js"></script>
 
 		<script src="script/UICreator.js"></script>
 
@@ -30,7 +31,7 @@
 						mqtt.Subscribe( "#" );
 					}
 
-					// Place the elements based on configration
+					// Place the elements based on configuration
 					var uic = UICreator.Instance();
 					uic.BuildPages();
 				});			

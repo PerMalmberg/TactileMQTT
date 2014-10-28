@@ -1,0 +1,10 @@
+<!-- We need an element we can place -->
+<div class="tactilePosition">
+	<!-- This is the actual widget -->
+	<input 
+		class="tactileElement" 
+		type="checkbox"
+		data-role="flipswitch"
+		onchange="MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );"
+		/>
+</div>
