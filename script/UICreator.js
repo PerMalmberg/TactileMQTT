@@ -30,9 +30,7 @@ var UICreator = (function() {
 					for( var currPage = 0; currPage < pages.length; ++currPage ) {
 						CreatePage( pages[currPage], templateReader );
 					}
-
-					BindEvents();
-					
+			
 					EnableUI();	
 				}				
 			}
@@ -96,7 +94,7 @@ var UICreator = (function() {
 				// Create a dom object and insert it into the page
 				page.append( $.parseHTML( template.html ) );
 				// Find the newly added element by class
-				// Can we create the positioning element in code instead, it would simplify the element templates.
+				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
 				var positionElement = $( ".tactilePosition" );
 				var element = $( ".tactileElement" );
 				
@@ -194,16 +192,6 @@ var UICreator = (function() {
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
-	    ///////////////////////////////////////////////////////////////////////////////////		
-		var BindEvents = function()
-		{
-			// Bind event handler for all checkboxes
-			$('form').on('change', ':checkbox', CheckBoxChange );
-		}
-
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
 		var ReadConfig = function()
 		{
@@ -234,16 +222,6 @@ var UICreator = (function() {
 			}
 
 			return res;
-		}
-
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		var CheckBoxChange = function( event )
-		{
-			var id ="#" + event.target.id;
-			console.log( $( id ).data( "mqtt-topic") );
 		}
 	}
 	
