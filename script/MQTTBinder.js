@@ -32,10 +32,10 @@ var MQTTBinder = (function() {
 					}
 								
 					mySubscriptions[topic].push( 
-					{
-						id : "#" + id,
-						type : propType
-					}
+						{
+							id : "#" + id,
+							type : propType
+						}
 					);
 					
 					// Subscribe to the topic
