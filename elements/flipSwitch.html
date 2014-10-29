@@ -24,16 +24,7 @@
 			{
 				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
 			}
-		
-			// Register our initialization and refresh/update functions.
-			UICreator.Instance().RegisterInit( 
-				"flipswitch", 
-				function( id ) { 
-					$( id ).flipswitch();
-					$( id ).on( 'change', {}, SendFlipswitch );
-				}
-			);
-				
+					
 			MQTTBinder.Instance().RegisterElementCallbacks( 
 				"flipswitch",
 				function( id, value ) { 

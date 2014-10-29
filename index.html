@@ -21,7 +21,7 @@
 
 		<!-- Get things started -->
 		<script type="text/javascript">					
-			$(window).load( function() {
+			$(window).ready( function() {
 				var cfg = new ConfigurationReader();
 				if( cfg.Read( "conf/tactile.json", true ) ) {
 					var binder = MQTTBinder.Instance();

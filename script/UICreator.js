@@ -3,7 +3,6 @@ var UICreator = (function() {
 	 
 	var myInstance = null;
 	var myLandingPage = null;
-	var myInitFunc = {};
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -37,19 +36,7 @@ var UICreator = (function() {
 				}				
 			}
 		}
-	
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterInit = function( elementType, func )
-		{
-			if( myInitFunc[elementType] ) {
-				myInitFunc[elementType].func = func;
-			}
-			
-		}
-	
+		
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
@@ -85,18 +72,6 @@ var UICreator = (function() {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i, createdElementNames );
-									
-									if( elementId ) {
-										// Prepare for initialization for this id
-										if( !myInitFunc[templateData.elementName] ) {
-											myInitFunc[templateData.elementName] = { 
-																					func : function( id ) {},
-																					ids : [] 
-																					};
-										}
-										
-										myInitFunc[templateData.elementName].ids.push( elementId );
-									}
 								}
 								else {
 									console.log( "Could not read HTML template for '" + currElem.type + "'" );
@@ -231,14 +206,6 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 		var EnableUI = function()
 		{
-			// Call initialization functions
-			for( var key in myInitFunc ) {
-				var currType = myInitFunc[key];
-				for( var id in currType.ids ) {
-					currType.func(  currType.ids[id] );
-				}
-			}
-
 			if( myLandingPage ) {
 				$.mobile.navigate( myLandingPage );
 			}
