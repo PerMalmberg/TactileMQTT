@@ -24,7 +24,6 @@
 						"type" : "flipswitch",
 						"properties" :
 						{					
-							"id" : "mySwitch",
 							"data-mini": false,
 							"mqttTopic": "TactileMQTT/myTopic"							
 						},
@@ -37,7 +36,6 @@
 						"type" : "flipswitch",
 						"properties" :
 						{					
-							"id" : "mySwitch2",
 							"data-mini": false,
 							"mqttTopic": "TactileMQTT/myTopic2"							
 						},

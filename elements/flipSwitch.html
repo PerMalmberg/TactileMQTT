@@ -2,9 +2,20 @@
 <div class="tactilePosition">
 	<!-- This is the actual widget -->
 	<input 
-		class="tactileElement mqttSubscriber" 
+		class="tactileElement mqttSubscriber"
 		type="checkbox"
 		data-role="flipswitch"
 		onchange="MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );"
+		mqttValue="checked"
+		mqttPropType="boolean"
+		mqttElementType="flipswitch"
 		/>
+		<script type="text/javascript">
+			// Register our initialization function
+			var creator = UICreator.Instance();
+			creator.RegisterInit( "flipswitch", function( id ) { $( id ).flipswitch(); } );
+			// Register our refresh function
+			var binder = MQTTBinder.Instance();
+			binder.RegisterRefresh( "flipswitch", function( id ) { $( id ).flipswitch( 'refresh' ); } );
+		</script>
 </div>

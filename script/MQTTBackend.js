@@ -55,6 +55,7 @@ var MQTTBackend = (function() {
 				try {
 					var msg = new Paho.MQTT.Message( message );
 					msg.destinationName = topic;
+					msg.qos = 2;
 					client.send( msg );
 				}
 				catch( err ) {

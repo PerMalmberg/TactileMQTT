@@ -4,7 +4,8 @@
 		{ 
 			"elementName" : "flipswitch",
 			"template" : "flipSwitch.json",
-			"htmlTemplate" : "flipSwitch.html"
+			"htmlTemplate" : "flipSwitch.html",
+			"init": "flipSwitch.js"
 		}			
 	]
 }

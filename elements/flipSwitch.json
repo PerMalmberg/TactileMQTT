@@ -36,9 +36,6 @@
 				"default" : "0",
 				"suffixValue" : "px;"
 			}
-		},
-		"mqttbinding" : {
-
 		}
 	}
 }
