@@ -70,6 +70,8 @@ var UICreator = (function() {
 				// Append this page to the DOM so we can work with it using jQuery
 				$("body").append( divPage );
 				
+				var createdElementNames = [];
+				
 				// Loop the elements, and find each template.
 				for( var i = 0; i < pageData.elements.length; ++i ) {
 					var currElem = pageData.elements[i];
@@ -82,7 +84,8 @@ var UICreator = (function() {
 							if( htmlReader.Read( "/elements/" + templateData.elementName + ".html" ) ) {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
-									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
+									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i, createdElementNames );
+									
 									if( elementId ) {
 										// Prepare for initialization for this id
 										if( !myInitFunc[templateData.elementName] ) {
@@ -118,15 +121,25 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var CreateElement = function( pageName, template, htmlTemplate, elementConfig, elementCount )
+		var CreateElement = function( pageName, template, htmlTemplate, elementConfig, elementCount, createdElementNames )
 		{
 			var elementId = null;
 		
 			// Get the div with the class 'ui-content' we're supposed to work on.
 			var page = $( "#" + pageName ).find( ".ui-content" );
 			if( page ) {
+			
+				// Only load script the first time an element type is created.
+				var loadScript = false;
+				if( createdElementNames.indexOf( elementConfig.type ) == -1 ) {
+					// Load scripts this time...
+					loadScript = true;
+					// ...but prevent loading it again for this type.
+					createdElementNames.push( elementConfig.type );					
+				}				
+			
 				// Create a dom object and insert it into the page
-				page.append( $.parseHTML( htmlTemplate, true ) );
+				page.append( $.parseHTML( htmlTemplate, loadScript ) );
 				// Find the newly added element by class
 				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
 				var positionElement = $( ".tactilePosition" );
