@@ -29,10 +29,12 @@
 					
 					// Place the elements based on configuration
 					var uic = UICreator.Instance();
-					uic.BuildPages();										
-					// Bind elements to their subscription
+					uic.BuildPages();						
+					
+					// Bind elements to their subscriptions
 					binder.Bind( mqtt );
 					
+					// Start MQTT backend
 					mqtt.Start( cfg, null, binder.HandleMessage );
 				}
 			});			
