@@ -75,8 +75,8 @@ var UICreator = (function() {
 					var templateData = FindElementTemplate( currElem.type );
 					
 					if( templateData ) {						
-						if( templateReader.Read( "/elements/" + templateData.template ) ) {
-							if( htmlReader.Read( "/elements/" + templateData.htmlTemplate ) ) {
+						if( templateReader.Read( "/elements/" + templateData.elementName + ".json" ) ) {
+							if( htmlReader.Read( "/elements/" + templateData.elementName + ".html" ) ) {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
 									CreateElement( pageName, template, htmlReader.Get(), currElem, i );

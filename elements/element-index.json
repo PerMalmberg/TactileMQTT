@@ -2,10 +2,7 @@
 	"elements":
 	[
 		{ 
-			"elementName" : "flipswitch",
-			"template" : "flipSwitch.json",
-			"htmlTemplate" : "flipSwitch.html",
-			"init": "flipSwitch.js"
-		}			
+			"elementName" : "flipswitch"
+		}
 	]
 }

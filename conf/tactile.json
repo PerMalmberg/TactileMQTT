@@ -43,6 +43,54 @@
 							"top" : 150,
 							"left": 700
 						}						
+					},
+					{
+						"type" : "flipswitch",
+						"properties" :
+						{					
+							"data-mini": true,
+							"mqttTopic": "TactileMQTT/myTopic2"							
+						},
+						"position" : {
+							"top" : 190,
+							"left": 700
+						}						
+					},
+					{
+						"type" : "flipswitch",
+						"properties" :
+						{					
+							"data-mini": false,
+							"mqttTopic": "TactileMQTT/myTopic2"							
+						},
+						"position" : {
+							"top" : 230,
+							"left": 700
+						}						
+					},
+					{
+						"type" : "flipswitch",
+						"properties" :
+						{					
+							"data-mini": false,
+							"mqttTopic": "TactileMQTT/myTopic2"							
+						},
+						"position" : {
+							"top" : 270,
+							"left": 700
+						}						
+					},
+					{
+						"type" : "flipswitch",
+						"properties" :
+						{					
+							"data-mini": false,
+							"mqttTopic": "TactileMQTT/myTopic2"							
+						},
+						"position" : {
+							"top" : 310,
+							"left": 700
+						}						
 					}
 				]				
 			}			

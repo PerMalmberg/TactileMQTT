@@ -12,7 +12,7 @@
 				"default" : "Off"
 			},
 			"data-mini" : { 
-				"desc" : "Mini-version",
+				"desc" : "Mini version",
 				"type" : "bool",
 				"default" : "false"
 				
