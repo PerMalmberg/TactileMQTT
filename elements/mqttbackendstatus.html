@@ -21,7 +21,6 @@
 			// Register our initialization and refresh/update functions.
 			UICreator.Instance().RegisterInit( "mqttbackendstatus", function( id ) { } );
 			MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
-				function( id ) { },
 				function( id, value ) { $( id ).text( value ? "Connected" : "Disconnected" ); } );
 		</script>
 </div>

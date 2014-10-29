@@ -75,7 +75,6 @@ var MQTTBinder = (function() {
 							// Call refresh function
 							if( myElementCallback[tactileElementType] ) {
 								myElementCallback[tactileElementType]['updateVal']( subInfo.id, value );
-								myElementCallback[tactileElementType]['refresh']( subInfo.id );
 							}
 						}
 						catch( err ) {
@@ -93,9 +92,9 @@ var MQTTBinder = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterElementCallbacks = function( elementType, refresh, updateVal )
+		this.RegisterElementCallbacks = function( elementType, updateVal )
 		{
-			myElementCallback[elementType] = { refresh: refresh, updateVal: updateVal };
+			myElementCallback[elementType] = { updateVal: updateVal };
 		}
 	};
 

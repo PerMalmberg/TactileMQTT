@@ -36,10 +36,10 @@
 				
 			MQTTBinder.Instance().RegisterElementCallbacks( 
 				"flipswitch",
-				function( id ) {  $( id ).flipswitch( 'refresh' ) },
 				function( id, value ) { 
 					$( id ).off('change');
 					$( id ).prop( 'checked', value );
+					$( id ).flipswitch( 'refresh' );
 					$( id ).on( 'change', SendFlipswitch );
 				}
 			);

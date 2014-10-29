@@ -20,7 +20,6 @@
 			// Register our initialization and refresh/update functions.
 			UICreator.Instance().RegisterInit( "mqttbackendcounter", function( id ) { } );
 			MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
-				function( id ) { },
 				function( id, value ) { $( id ).text( value ); } );
 		</script>
 </div>
