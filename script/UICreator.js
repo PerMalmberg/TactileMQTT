@@ -80,8 +80,8 @@ var UICreator = (function() {
 					var templateData = FindElementTemplate( currElem.type );
 					
 					if( templateData ) {						
-						if( templateReader.Read( "/elements/" + templateData.elementName + ".json" ) ) {
-							if( htmlReader.Read( "/elements/" + templateData.elementName + ".html" ) ) {
+						if( templateReader.Read( "elements/" + templateData.elementName + ".json" ) ) {
+							if( htmlReader.Read( "elements/" + templateData.elementName + ".html" ) ) {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i, createdElementNames );
@@ -255,7 +255,7 @@ var UICreator = (function() {
 		{
 			var res = false;
 
-			if( myCfg.Read( "/elements/element-index.json" ) ) {
+			if( myCfg.Read( "elements/element-index.json" ) ) {
 				var elementContainer = myCfg.GetPath( "elements" );		
 				
 				if( elementContainer && elementContainer.length > 0 ) {		
@@ -264,7 +264,7 @@ var UICreator = (function() {
 						myElements.push( elementContainer[i] );						
 					}
 				
-					if( myCfg.Read( "/conf/tactile.json" ) ) {
+					if( myCfg.Read( "conf/tactile.json" ) ) {
 						// Get the page we're going to show when all things are done.
 						myLandingPage = "#" + myCfg.GetString( "page", "landingPage" );
 	
