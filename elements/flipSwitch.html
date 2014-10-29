@@ -1,21 +1,30 @@
 <!-- We need an element we can place -->
 <div class="tactilePosition">
-	<!-- This is the actual widget. All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates. -->
+	<!-- 
+	
+	All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates.
+	
+	TactileMQTT attributes:
+		* tactilePropType
+			Set this to boolean if the data type to set is boolean, otherwise leave it out.
+		* tactileElementType
+			Used as a identifier when calling functions registered via UICreator::RegisterInit() and MQTTBinder::RegisterElementCallbacks().
+			Must be the same as the 'tactileElementType'-parameter in the respective calls.
+	
+	-->
 	<input 
 		class="tactileElement mqttSubscriber"
 		type="checkbox" 
 		data-role="flipswitch"
 		onchange="MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );"
-		tactileChangeProperty="checked"
 		tactilePropType="boolean"
 		tactileElementType="flipswitch"
 		/>
 		<script type="text/javascript">
-			// Register our initialization and refresh functions.
-			// NOTE: Use the same value as in attribute tactileElementType for the elementType argument in both cases.
-			var creator = UICreator.Instance();
-			creator.RegisterInit( "flipswitch", function( id ) { $( id ).flipswitch(); } );
-			var binder = MQTTBinder.Instance();
-			binder.RegisterRefresh( "flipswitch", function( id ) { $( id ).flipswitch( 'refresh' ); } );
+			// Register our initialization and refresh/update functions.
+			UICreator.Instance().RegisterInit( "flipswitch", function( id ) { $( id ).flipswitch(); } );
+			MQTTBinder.Instance().RegisterElementCallbacks( "flipswitch",
+				function( id ) {  $( id ).flipswitch( 'refresh' ) },
+				function( id, value ) {  $( id ).prop( 'checked', value ); } );
 		</script>
 </div>

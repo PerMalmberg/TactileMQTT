@@ -3,7 +3,7 @@ var MQTTBinder = (function() {
 
 	var myInstance = null;
 	var mySubscriptions = {};
-	var myRefreshFunc = {};
+	var myElementCallback = {};
 
 	function MQTTBinderConstructor()
 	{
@@ -21,10 +21,7 @@ var MQTTBinder = (function() {
 				var topic = $( this ).attr( "mqttTopic" );
 				// Get the id of this element for use as lookup
 				var id = $( this ).attr( "id" );
-				
-				// Get which property to change when a matching topic is received.
-				var prop = $( this ).attr( "tactileChangeProperty" );
-				
+						
 				// Get the type of the property
 				var propType = $( this ).attr( "tactilePropType" );
 				
@@ -36,7 +33,6 @@ var MQTTBinder = (function() {
 				mySubscriptions[topic].push( 
 					{
 						id : "#" + id,
-						prop : prop,
 						type : propType
 					}
 				)
@@ -55,7 +51,7 @@ var MQTTBinder = (function() {
 		{
 			try {
 				// Any subscriptions for this topic?
-				if( mySubscriptions.hasOwnProperty( topic ) ) {
+				if( mySubscriptions[topic] ) {
 					// Update all values
 					for( var ix in mySubscriptions[topic] ) {
 						var subInfo = mySubscriptions[topic][ix];
@@ -65,19 +61,14 @@ var MQTTBinder = (function() {
 						if( subInfo.type === "boolean" ) {
 							value = message == "true" || message == "1";
 						}
-						
-						console.log( "Before change:" + $( subInfo.id ).prop( subInfo.prop ) );
-												
-						$( subInfo.id ).prop( subInfo.prop, value );
-						
+																	
 						var tactileElementType = $( subInfo.id ).attr( "tactileElementType" );
-						
+										
 						// Call refresh function
-						if( myRefreshFunc[tactileElementType] ) {
-							myRefreshFunc[tactileElementType]( subInfo.id );
+						if( myElementCallback[tactileElementType] ) {
+							myElementCallback[tactileElementType]['updateVal']( subInfo.id, value );
+							myElementCallback[tactileElementType]['refresh']( subInfo.id );
 						}
-						
-						console.log( "After change:" + $( subInfo.id ).prop( subInfo.prop ) );
 					}
 				}
 			}
@@ -90,9 +81,9 @@ var MQTTBinder = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterRefresh = function( elementType, func )
+		this.RegisterElementCallbacks = function( elementType, refresh, updateVal )
 		{
-			myRefreshFunc[elementType] = func;
+			myElementCallback[elementType] = { refresh: refresh, updateVal: updateVal };
 		}
 	};
 
