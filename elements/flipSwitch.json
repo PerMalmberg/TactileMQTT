@@ -17,7 +17,7 @@
 				"default" : "false"
 				
 			},
-			"mqtt-topic" : {
+			"mqtttopic" : {
 				"desc" : "MQTT Topic",
 				"type" : "string",
 				"default" : ""
