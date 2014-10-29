@@ -1,20 +1,20 @@
 <!-- We need an element we can place -->
 <div class="tactilePosition">
-	<!-- This is the actual widget -->
+	<!-- This is the actual widget. All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates. -->
 	<input 
 		class="tactileElement mqttSubscriber"
-		type="checkbox"
+		type="checkbox" 
 		data-role="flipswitch"
 		onchange="MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );"
-		mqttValue="checked"
-		mqttPropType="boolean"
-		mqttElementType="flipswitch"
+		tactileChangeProperty="checked"
+		tactilePropType="boolean"
+		tactileElementType="flipswitch"
 		/>
 		<script type="text/javascript">
-			// Register our initialization function
+			// Register our initialization and refresh functions.
+			// NOTE: Use the same value as in attribute tactileElementType for the elementType argument in both cases.
 			var creator = UICreator.Instance();
 			creator.RegisterInit( "flipswitch", function( id ) { $( id ).flipswitch(); } );
-			// Register our refresh function
 			var binder = MQTTBinder.Instance();
 			binder.RegisterRefresh( "flipswitch", function( id ) { $( id ).flipswitch( 'refresh' ); } );
 		</script>

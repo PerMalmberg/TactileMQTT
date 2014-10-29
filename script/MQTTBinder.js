@@ -23,10 +23,10 @@ var MQTTBinder = (function() {
 				var id = $( this ).attr( "id" );
 				
 				// Get which property to change when a matching topic is received.
-				var prop = $( this ).attr( "mqttValue" );
+				var prop = $( this ).attr( "tactileChangeProperty" );
 				
 				// Get the type of the property
-				var propType = $( this ).attr( "mqttPropType" );
+				var propType = $( this ).attr( "tactilePropType" );
 				
 				if( !mySubscriptions.hasOwnProperty( topic ) ) {
 					// New topic, create holder for ids.
@@ -70,14 +70,12 @@ var MQTTBinder = (function() {
 												
 						$( subInfo.id ).prop( subInfo.prop, value );
 						
-						var tactileElementType = $( subInfo.id ).attr( "mqttElementType" );
+						var tactileElementType = $( subInfo.id ).attr( "tactileElementType" );
 						
 						// Call refresh function
 						if( myRefreshFunc[tactileElementType] ) {
 							myRefreshFunc[tactileElementType]( subInfo.id );
 						}
-						
-						//$( subInfo.id ).flipswitch( 'refresh' );
 						
 						console.log( "After change:" + $( subInfo.id ).prop( subInfo.prop ) );
 					}
