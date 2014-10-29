@@ -23,7 +23,7 @@
 		<script type="text/javascript">					
 			$(window).load( function() {
 				var cfg = new ConfigurationReader();
-				if( cfg.Read( "/conf/tactile.json", true ) ) {
+				if( cfg.Read( "conf/tactile.json", true ) ) {
 					var binder = MQTTBinder.Instance();
 					var mqtt = MQTTBackend.Instance();
 					
