@@ -1,0 +1,27 @@
+<!-- We need an element we can place -->
+<div class="tactilePosition">
+	<!-- 
+	
+	All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates.
+	
+	TactileMQTT attributes:
+		* tactilePropType
+			Set this to 'boolean' if the data type to set is boolean, otherwise leave it out.
+		* tactileElementType
+			Used as a identifier when calling functions registered via UICreator::RegisterInit() and MQTTBinder::RegisterElementCallbacks().
+			Must be the same as the 'tactileElementType'-parameter in the respective calls.
+	
+	-->
+	<div 
+		class="tactileElement mqttSubscriber"
+		tactileElementType="mqttbackendstatus"
+		tactilePropType="boolean"
+		/>
+		<script type="text/javascript">
+			// Register our initialization and refresh/update functions.
+			UICreator.Instance().RegisterInit( "mqttbackendstatus", function( id ) { } );
+			MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
+				function( id ) { },
+				function( id, value ) { $( id ).text( value ? "Connected" : "Disconnected" ); } );
+		</script>
+</div>

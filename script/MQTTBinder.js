@@ -23,22 +23,27 @@ var MQTTBinder = (function() {
 				var id = $( this ).attr( "id" );
 						
 				// Get the type of the property
-				var propType = $( this ).attr( "tactilePropType" );
+				var propType = $( this ).attr( "tactilePropType" ) || "string";
 				
-				if( !mySubscriptions.hasOwnProperty( topic ) ) {
-					// New topic, create holder for ids.
-					mySubscriptions[topic] = [];
-				}
+				if( topic && id && propType ) {
+					if( !mySubscriptions.hasOwnProperty( topic ) ) {
+						// New topic, create holder for ids.
+						mySubscriptions[topic] = [];
+					}
 								
-				mySubscriptions[topic].push( 
+					mySubscriptions[topic].push( 
 					{
 						id : "#" + id,
 						type : propType
 					}
-				)
-				
-				// Subscribe to the topic
-				mqttBackend.Subscribe( topic );
+					);
+					
+					// Subscribe to the topic
+					mqttBackend.Subscribe( topic );
+				}
+				else{
+					console.log( "Missing topic, id or propType" );
+				}
 			});
 		}
 
@@ -61,13 +66,20 @@ var MQTTBinder = (function() {
 						if( subInfo.type === "boolean" ) {
 							value = message == "true" || message == "1";
 						}
+						else {
+							value = message;
+						}
 																	
 						var tactileElementType = $( subInfo.id ).attr( "tactileElementType" );
-										
-						// Call refresh function
-						if( myElementCallback[tactileElementType] ) {
-							myElementCallback[tactileElementType]['updateVal']( subInfo.id, value );
-							myElementCallback[tactileElementType]['refresh']( subInfo.id );
+						try {				
+							// Call refresh function
+							if( myElementCallback[tactileElementType] ) {
+								myElementCallback[tactileElementType]['updateVal']( subInfo.id, value );
+								myElementCallback[tactileElementType]['refresh']( subInfo.id );
+							}
+						}
+						catch( err ) {
+							console.log( "Error calling element callbacks: " + err.message );
 						}
 					}
 				}

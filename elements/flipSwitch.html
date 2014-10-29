@@ -16,15 +16,31 @@
 		class="tactileElement mqttSubscriber"
 		type="checkbox" 
 		data-role="flipswitch"
-		onchange="MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );"
 		tactilePropType="boolean"
-		tactileElementType="flipswitch"
-		/>
-		<script type="text/javascript">
-			// Register our initialization and refresh/update functions.
-			UICreator.Instance().RegisterInit( "flipswitch", function( id ) { $( id ).flipswitch(); } );
-			MQTTBinder.Instance().RegisterElementCallbacks( "flipswitch",
-				function( id ) {  $( id ).flipswitch( 'refresh' ) },
-				function( id, value ) {  $( id ).prop( 'checked', value ); } );
-		</script>
+		tactileElementType="flipswitch"/>
 </div>
+<script type="text/javascript">
+			var SendFlipswitch = function()
+			{
+				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
+			}
+		
+			// Register our initialization and refresh/update functions.
+			UICreator.Instance().RegisterInit( 
+				"flipswitch", 
+				function( id ) { 
+					$( id ).flipswitch();
+					$( id ).on( 'change', {}, SendFlipswitch );
+				}
+			);
+				
+			MQTTBinder.Instance().RegisterElementCallbacks( 
+				"flipswitch",
+				function( id ) {  $( id ).flipswitch( 'refresh' ) },
+				function( id, value ) { 
+					$( id ).off('change');
+					$( id ).prop( 'checked', value );
+					$( id ).on( 'change', SendFlipswitch );
+				}
+			);
+</script>

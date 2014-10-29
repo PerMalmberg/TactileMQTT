@@ -3,6 +3,12 @@
 	[
 		{ 
 			"elementName" : "flipswitch"
+		},
+		{
+			"elementName" : "mqttbackendstatus"
+		},
+		{
+			"elementName" : "mqttbackendcounter"
 		}
 	]
 }

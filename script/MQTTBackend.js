@@ -228,6 +228,10 @@ var MQTTBackend = (function() {
 			if( myStatusCallback ) {
 				myStatusCallback( IsConnected(), myTotalMessageCount );
 			}
+			
+			// Send fake MQTT message as well to enable listening to this data.
+			myMessageCallback( "TactileMQTT/IsConnected", IsConnected() ? "true" : "false" );
+			myMessageCallback( "TactileMQTT/MessageCount", myTotalMessageCount );
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////

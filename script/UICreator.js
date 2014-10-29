@@ -44,7 +44,10 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 		this.RegisterInit = function( elementType, func )
 		{
-			myInitFunc[elementType] = func;
+			if( myInitFunc[elementType] ) {
+				myInitFunc[elementType].func = func;
+			}
+			
 		}
 	
 		///////////////////////////////////////////////////////////////////////////////////
@@ -79,19 +82,30 @@ var UICreator = (function() {
 							if( htmlReader.Read( "/elements/" + templateData.elementName + ".html" ) ) {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
-									CreateElement( pageName, template, htmlReader.Get(), currElem, i );
+									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
+									if( elementId ) {
+										// Prepare for initialization for this id
+										if( !myInitFunc[templateData.elementName] ) {
+											myInitFunc[templateData.elementName] = { 
+																					func : function( id ) {},
+																					ids : [] 
+																					};
+										}
+										
+										myInitFunc[templateData.elementName].ids.push( elementId );
+									}
 								}
 								else {
-									console.log( "Could not read HTML template for '" + type + "'" );
+									console.log( "Could not read HTML template for '" + currElem.type + "'" );
 								}
 							}
 							else {
-								console.log( "Could not read template for '" + type + "'" );
+								console.log( "Could not read template for '" + currElem.type + "'" );
 							}
 						}
 					}
 					else {
-						console.log( "Could not find a matching for template file for element type '" + type + "'" );
+						console.log( "Could not find a matching template file for element type '" + currElem.type + "'" );
 					}
 				}
 			}
@@ -106,6 +120,8 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 		var CreateElement = function( pageName, template, htmlTemplate, elementConfig, elementCount )
 		{
+			var elementId = null;
+		
 			// Get the div with the class 'ui-content' we're supposed to work on.
 			var page = $( "#" + pageName ).find( ".ui-content" );
 			if( page ) {
@@ -123,7 +139,10 @@ var UICreator = (function() {
 						element.removeClass( "tactileElement" );
 						// Set id based on page name and element count.
 						positionElement.attr( "id", pageName + "-position-" + elementCount ); 
-						element.attr( "id", pageName + "-" + elementCount ); 				
+						
+						elementId = pageName + "-" + elementCount;
+						element.attr( "id", elementId ); 				
+						
 						ApplyDefaultProperties( element, template.properties );
 						ApplyConfiguredProperties( element, elementConfig.properties );
 						ApplyPosition( positionElement, elementConfig.position );
@@ -139,6 +158,8 @@ var UICreator = (function() {
 			else {
 				console.log( "Could not find a div with class 'ui-content' in page '" + pageName + "'" ); 
 			}	
+			
+			return elementId;
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +220,10 @@ var UICreator = (function() {
 		{
 			// Call initialization functions
 			for( var key in myInitFunc ) {
-				myInitFunc[key]( key );
+				var currType = myInitFunc[key];
+				for( var id in currType.ids ) {
+					currType.func(  currType.ids[id] );
+				}
 			}
 
 			if( myLandingPage ) {

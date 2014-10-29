@@ -1,0 +1,25 @@
+{
+	"mqttbackendcounter" : {
+		"properties" : {
+			"mqtttopic" : {
+				"desc" : "MQTT Topic",
+				"type" : "string",
+				"default" : "TactileMQTT/MessageCount"
+			}
+		},
+		"position" : {
+			"top" : { 
+				"desc" : "Left coordinate",
+				"type" : "int",
+				"default" : "0",
+				"suffixValue" : "px;"
+			},
+			"left" : { 
+				"desc" : "Top coordinate",
+				"type" : "int",
+				"default" : "0",
+				"suffixValue" : "px;"
+			}
+		}
+	}
+}
