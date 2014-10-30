@@ -34,4 +34,6 @@
 					$( id ).on( 'change', SendFlipswitch );
 				}
 			);
+			
+			UICreator.Instance().RegisterInit( function( uiData ) { $( uiData.elementId ).on( 'change', SendFlipswitch ); } );
 </script>
