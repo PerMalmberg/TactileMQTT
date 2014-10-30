@@ -4,7 +4,7 @@ var UICreator = (function() {
 	var myInstance = null;
 	var includedElementScripts = [];
 	var myLandingPage = null;
-	var myInitFunctions = [];
+	var myInitFunctions = {};
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -46,9 +46,9 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterInit = function( func )
+		this.RegisterInit = function( elementType, func )
 		{
-			myInitFunctions.push( func );
+			myInitFunctions[elementType] = func;
 		}
 		
 		this.GetConfig = function()
@@ -90,10 +90,10 @@ var UICreator = (function() {
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
 									$( elementId ).trigger( "create" );
-									// Has this element registered an initialization function?
-									while( myInitFunctions.length > 0 ) {
-										// Yes, call it.
-										myInitFunctions.shift()( { elementId: elementId, currentPage: pageName } );
+									// Has this element type registered an initialization function?
+									
+									if( myInitFunctions[currElem.type] ) {									
+										myInitFunctions[currElem.type]( { elementId: "#" + elementId, currentPage: pageName } );
 									}
 								}
 								else {
@@ -141,6 +141,7 @@ var UICreator = (function() {
 			
 				// Create a dom object and insert it into the page
 				page.append( $.parseHTML( htmlTemplate, loadScript ) );
+				
 				// Find the newly added element by class
 				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
 				var positionElement = $( ".tactilePosition" );
