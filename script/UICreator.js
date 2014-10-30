@@ -2,7 +2,9 @@ var UICreator = (function() {
 	"use strict";
 	 
 	var myInstance = null;
+	var includedElementScripts = [];
 	var myLandingPage = null;
+	var myInitFunctions = [];
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -32,9 +34,26 @@ var UICreator = (function() {
 						CreatePage( pages[currPage], templateReader, htmlReader );
 					}
 			
+					// Remove the template page
+					$( ".templatePage" ).remove();
+			
 					EnableUI();	
 				}				
 			}
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.RegisterInit = function( func )
+		{
+			myInitFunctions.push( func );
+		}
+		
+		this.GetConfig = function()
+		{
+			return myCfg;
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -57,8 +76,6 @@ var UICreator = (function() {
 				// Append this page to the DOM so we can work with it using jQuery
 				$("body").append( divPage );
 				
-				var createdElementNames = [];
-				
 				// Loop the elements, and find each template.
 				for( var i = 0; i < pageData.elements.length; ++i ) {
 					var currElem = pageData.elements[i];
@@ -71,7 +88,13 @@ var UICreator = (function() {
 							if( htmlReader.Read( "elements/" + templateData.elementName + ".html" ) ) {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
-									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i, createdElementNames );
+									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
+									$( elementId ).trigger( "create" );
+									// Has this element registered an initialization function?
+									while( myInitFunctions.length > 0 ) {
+										// Yes, call it.
+										myInitFunctions.shift()( { elementId: elementId, currentPage: pageName } );
+									}
 								}
 								else {
 									console.log( "Could not read HTML template for '" + currElem.type + "'" );
@@ -86,6 +109,9 @@ var UICreator = (function() {
 						console.log( "Could not find a matching template file for element type '" + currElem.type + "'" );
 					}
 				}
+			
+				// Lastly trigger the create event on the page to make sure all elements are initialized.
+				divPage.trigger( 'create' );
 			}
 			else {
 				console.log( "Page does not contain pageName and/or elements" );
@@ -96,7 +122,7 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var CreateElement = function( pageName, template, htmlTemplate, elementConfig, elementCount, createdElementNames )
+		var CreateElement = function( pageName, template, htmlTemplate, elementConfig, elementCount )
 		{
 			var elementId = null;
 		
@@ -106,11 +132,11 @@ var UICreator = (function() {
 			
 				// Only load script the first time an element type is created.
 				var loadScript = false;
-				if( createdElementNames.indexOf( elementConfig.type ) == -1 ) {
+				if( includedElementScripts.indexOf( elementConfig.type ) == -1 ) {
 					// Load scripts this time...
 					loadScript = true;
 					// ...but prevent loading it again for this type.
-					createdElementNames.push( elementConfig.type );					
+					includedElementScripts.push( elementConfig.type );					
 				}				
 			
 				// Create a dom object and insert it into the page
@@ -120,24 +146,20 @@ var UICreator = (function() {
 				var positionElement = $( ".tactilePosition" );
 				var element = $( ".tactileElement" );
 				
-				if( positionElement ) {			
-					if( element ) {
-						// Remove all classes
-						positionElement.removeClass( "tactilePosition" );
-						element.removeClass( "tactileElement" );
-						// Set id based on page name and element count.
-						positionElement.attr( "id", pageName + "-position-" + elementCount ); 
-						
-						elementId = pageName + "-" + elementCount;
-						element.attr( "id", elementId ); 				
-						
-						ApplyDefaultProperties( element, template.properties );
-						ApplyConfiguredProperties( element, elementConfig.properties );
-						ApplyPosition( positionElement, elementConfig.position );
-					}
-					else {
-						console.log( "No element with class '" + tactileElement + "' found while creating element of type '" + elementConfig.type + "'" );
-					}
+				if( positionElement && positionElement.length ) {			
+					positionElement.removeClass( "tactilePosition" );
+					positionElement.attr( "id", pageName + "-" + elementConfig.type + "-" + elementCount + "-position"  );
+					ApplyPosition( positionElement, elementConfig.position );
+				}
+				
+				if( element && element.length ) {				
+					element.removeClass( "tactileElement" );
+					
+					elementId = pageName + "-" + elementConfig.type + "-" + elementCount;
+					element.attr( "id", elementId ); 				
+					
+					ApplyDefaultProperties( element, template.properties );
+					ApplyConfiguredProperties( element, elementConfig.properties );					
 				}
 				else {
 					console.log( "No position element found for element id '" + elementConfig.properties.id + "', type '" + elementConfig.type + "'" );
@@ -205,7 +227,7 @@ var UICreator = (function() {
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
 		var EnableUI = function()
-		{
+		{	
 			if( myLandingPage ) {
 				$.mobile.navigate( myLandingPage );
 			}
