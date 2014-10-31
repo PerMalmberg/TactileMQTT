@@ -1,0 +1,26 @@
+{
+	"tactilemenu" : {
+		"properties" : {
+			"data-role" : {
+				"desc" : "Where to place the menu (footer/header)",
+				"type" : "string",
+				"default" : "footer"
+			},
+			"data-theme" : {
+				"desc" : "Theme",
+				"type" : "string",
+				"default" : "a"
+			},
+			"data-fullscreen" : {
+				"desc" : "Fullscreen",
+				"type" : "boolean",
+				"default" : "true" 
+			},
+			"data-position" : {
+				"desc" : "Fullscreen",
+				"type" : "string",
+				"default" : "fixed" 
+			}
+		}
+	}
+}

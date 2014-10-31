@@ -1,0 +1,30 @@
+<script type="text/javascript">
+		function LoadTactileMenu( uiData )
+		{
+			var cfg = UICreator.Instance().GetConfig();
+			var pages = cfg.GetPath( "page.pages" );
+			
+			var self = $( uiData.elementId ); 
+			
+			// Loop the pages and build  menu with links to other pages.
+			for( key in pages ) {
+				var pageName = pages[key].pageName;
+				debugger;
+				if( pageName != uiData.currentPage ) {
+					self.find( "h1" ).append( $.parseHTML( "<a href=\"#" + pageName + "\">" + pages[key].pageTitle + "</a>" ) );
+				}
+			}
+			
+			UICreator.Instance().RegisterPageNavigationSubscriber( uiData.elementId, ShowHideTactileMenu );			
+		}
+		
+		function ShowHideTactileMenu( elementId, hash )
+		{
+			console.log( elementId + " - " + hash );
+		}
+		
+		UICreator.Instance().RegisterInit( "tactilemenu", LoadTactileMenu );		
+	</script>
+<div class="tactileElement">
+	<h1></h1>
+</div>

@@ -5,6 +5,7 @@ var UICreator = (function() {
 	var includedElementScripts = [];
 	var myLandingPage = null;
 	var myInitFunctions = {};
+	var pageNavigationSubscribers = {};
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -15,6 +16,15 @@ var UICreator = (function() {
 		var elementsCreated = false;
 		var myCfg = new ConfigurationReader();
 		var myElements = [];
+		
+		// Hook the page navigation event
+		$( window ).hashchange( function() {
+			var hash = location.hash;
+			
+			for( var elementId in pageNavigationSubscribers ) {
+				pageNavigationSubscribers[elementId]( elementId, hash || "" );
+			}		
+		});
 
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
@@ -51,6 +61,19 @@ var UICreator = (function() {
 			myInitFunctions[elementType] = func;
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.RegisterPageNavigationSubscriber = function( elementId, func )
+		{
+			pageNavigationSubscribers[elementId] = func;
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
 		this.GetConfig = function()
 		{
 			return myCfg;
@@ -90,18 +113,18 @@ var UICreator = (function() {
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
 									$( elementId ).trigger( "create" );
-									// Has this element type registered an initialization function?
 									
+									// Has this element type registered an initialization function?									
 									if( myInitFunctions[currElem.type] ) {									
 										myInitFunctions[currElem.type]( { elementId: "#" + elementId, currentPage: pageName } );
 									}
 								}
 								else {
-									console.log( "Could not read HTML template for '" + currElem.type + "'" );
+									console.log( "Could not get template for '" + currElem.type + "'" );
 								}
 							}
 							else {
-								console.log( "Could not read template for '" + currElem.type + "'" );
+								console.log( "Could not read HTML template for '" + currElem.type + "'" );
 							}
 						}
 					}
@@ -140,8 +163,16 @@ var UICreator = (function() {
 				}				
 			
 				// Create a dom object and insert it into the page
-				page.append( $.parseHTML( htmlTemplate, loadScript ) );
-				
+				var dom = $.parseHTML( htmlTemplate, loadScript );
+			
+				// Where should this element be placed?
+				if( elementConfig.placement == "body" ) {
+					$( "body" ).append( dom );
+				}
+				else { 					
+					page.append( dom );
+				}
+							
 				// Find the newly added element by class
 				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
 				var positionElement = $( ".tactilePosition" );

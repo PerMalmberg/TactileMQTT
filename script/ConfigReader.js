@@ -46,7 +46,7 @@ function ConfigurationReader() {
 					res = myCfg[objectName][parameterName];
 				}
 				else {
-					console.log( "Paramter name " + parameterName + " does not exist in object " + objectName );
+					console.log( "Parameter name " + parameterName + " does not exist in object " + objectName );
 				}
 			}
 			else {
