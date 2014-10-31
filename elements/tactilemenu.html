@@ -1,7 +1,12 @@
 <script type="text/javascript">
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		////////////////////////////////////////////////////////////////////////////////
 		function LoadTactileMenu( uiData )
 		{
 			var cfg = UICreator.Instance().GetConfig();
+			
 			var pages = cfg.GetPath( "page.pages" );
 			
 			var self = $( uiData.elementId ); 
@@ -9,22 +14,34 @@
 			// Loop the pages and build  menu with links to other pages.
 			for( key in pages ) {
 				var pageName = pages[key].pageName;
-				debugger;
 				if( pageName != uiData.currentPage ) {
-					self.find( "h1" ).append( $.parseHTML( "<a href=\"#" + pageName + "\">" + pages[key].pageTitle + "</a>" ) );
+					self.find( "h1" ).append( $.parseHTML( "<a class=\"ui-btn\" href=\"#" + pageName + "\">" + pages[key].pageTitle + "</a>" ) );
 				}
 			}
 			
+			// Set a class we can find later, based on the pageName
+			// Note, no # in the class name.
+			self.addClass( "tactileMenuFor" + uiData.currentPage );
+			
+			// Register for navigation events.
 			UICreator.Instance().RegisterPageNavigationSubscriber( uiData.elementId, ShowHideTactileMenu );			
 		}
 		
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		////////////////////////////////////////////////////////////////////////////////
 		function ShowHideTactileMenu( elementId, hash )
 		{
-			console.log( elementId + " - " + hash );
+			// Hide all menus
+			$( ".tactileMenu" ).find( "h1" ).hide();
+			// Find the menu to show. Remember to remove the '#' from the hash.
+			$( ".tactileMenuFor" + hash.replace( "#", "" ) ).find( "h1" ).show();
 		}
 		
 		UICreator.Instance().RegisterInit( "tactilemenu", LoadTactileMenu );		
-	</script>
-<div class="tactileElement">
-	<h1></h1>
+</script>
+<div class="tactileElement tactileMenu">
+	<h1>	
+	</h1>
 </div>

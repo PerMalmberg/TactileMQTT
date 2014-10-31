@@ -16,16 +16,25 @@ var UICreator = (function() {
 		var elementsCreated = false;
 		var myCfg = new ConfigurationReader();
 		var myElements = [];
-		
-		// Hook the page navigation event
-		$( window ).hashchange( function() {
-			var hash = location.hash;
-			
+
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var NotifyNavigationSubscribers = function()
+		{
+			var hash = location.hash;			
 			for( var elementId in pageNavigationSubscribers ) {
 				pageNavigationSubscribers[elementId]( elementId, hash || "" );
-			}		
-		});
-
+			}
+		}
+		
+		// Hook the page navigation event
+		$( window ).hashchange( NotifyNavigationSubscribers );
+		
+		// Hook the loaded event
+		$( window ).ready( NotifyNavigationSubscribers );
+						
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //

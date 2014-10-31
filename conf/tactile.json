@@ -17,7 +17,7 @@
 		[ 
 			{ 
 				"pageName" : "myLandingPage",
-				"pageTitle" : "TactileMQTT Demo",
+				"pageTitle" : "TactileMQTT Demo Page 1",
 				"elements" : 
 				[ 
 					{
@@ -25,7 +25,7 @@
 						"properties" :
 						{					
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopic"							
+							"mqttTopic": "TactileMQTT/myTopicQ"							
 						},
 						"position" : {
 							"top" : 150,
@@ -37,46 +37,10 @@
 						"properties" :
 						{					
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopic2"							
+							"mqttTopic": "TactileMQTT/myTopicQQ"							
 						},
 						"position" : {
 							"top" : 150,
-							"left": 700
-						}						
-					},
-					{
-						"type" : "flipswitch",
-						"properties" :
-						{					
-							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopic2"							
-						},
-						"position" : {
-							"top" : 200,
-							"left": 700
-						}						
-					},
-					{
-						"type" : "flipswitch",
-						"properties" :
-						{					
-							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopic2"							
-						},
-						"position" : {
-							"top" : 250,
-							"left": 700
-						}						
-					},
-					{
-						"type" : "flipswitch",
-						"properties" :
-						{					
-							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopic2"							
-						},
-						"position" : {
-							"top" : 300,
 							"left": 700
 						}						
 					},
@@ -93,9 +57,32 @@
 							"top" : 70,
 							"left": 50
 						}
+					},
+					{
+						"type" : "tactilemenu"
 					}
 				]				
-			}			
+			},
+			{ 
+				"pageName" : "secondPage",
+				"pageTitle" : "TactileMQTT Demo Page 2",
+				"elements" : 
+				[ 					
+					{
+						"type" : "tactilemenu"
+					}
+				]				
+			},
+			{ 
+				"pageName" : "thirdPage",
+				"pageTitle" : "TactileMQTT Demo Page 3",
+				"elements" : 
+				[ 					
+					{
+						"type" : "tactilemenu"
+					}
+				]				
+			}
 		]
 	}
 }
