@@ -15,9 +15,10 @@
 	<div 
 		class="tactileElement mqttSubscriber"
 		tactileElementType="mqttbackendcounter"/>
-			<script type="text/javascript">
-				// Register our update function.
-				MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
-					function( id, value ) { $( id ).text( value ); } );
-			</script>
-</div>
+</div>		
+<script type="text/javascript">
+			// Register our update function.
+			MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter", function( id, value ) { 
+				$( id ).text( value );
+			});
+</script>

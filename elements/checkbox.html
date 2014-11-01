@@ -27,15 +27,12 @@
 				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
 			}
 					
-			MQTTBinder.Instance().RegisterElementCallbacks( 
-				"checkbox",
-				function( id, value ) { 
-					$( id ).off('change');
-					$( id ).prop( 'checked', value );
-					$( id ).checkboxradio('refresh')
-					$( id ).on( 'change', SendCheckbox );
-				}
-			);
+			MQTTBinder.Instance().RegisterElementCallbacks( "checkbox", function( id, value ) { 
+				$( id ).off('change');
+				$( id ).prop( 'checked', value );
+				$( id ).checkboxradio('refresh')
+				$( id ).on( 'change', SendCheckbox );
+			});
 
 			UICreator.Instance().RegisterInit( "checkbox", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendCheckbox );

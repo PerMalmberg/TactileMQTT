@@ -16,9 +16,10 @@
 		class="tactileElement mqttSubscriber"
 		tactileElementType="mqttbackendstatus"
 		tactilePropType="boolean"/>
-			<script type="text/javascript">
-				// Register our update function.
-				MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
-					function( id, value ) { $( id ).text( value ? "Connected" : "Disconnected" ); } );
-			</script>
 </div>
+<script type="text/javascript">
+			// Register our update function.
+			MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus", function( id, value ) { 
+				$( id ).text( value ? "Connected" : "Disconnected" );
+			});
+</script>
