@@ -184,14 +184,9 @@ var UICreator = (function() {
 							
 				// Find the newly added element by class
 				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
-				var positionElement = $( ".tactilePosition" );
 				var element = $( ".tactileElement" );
 				
-				if( positionElement && positionElement.length ) {			
-					positionElement.removeClass( "tactilePosition" );
-					positionElement.attr( "id", pageName + "-" + elementConfig.type + "-" + elementCount + "-position"  );
-					ApplyPosition( positionElement, elementConfig.position );
-				}
+				ApplyPosition( elementConfig, pageName );
 				
 				if( element && element.length ) {				
 					element.removeClass( "tactileElement" );
@@ -200,7 +195,7 @@ var UICreator = (function() {
 					element.attr( "id", elementId ); 				
 					
 					ApplyDefaultProperties( element, template.properties );
-					ApplyConfiguredProperties( element, elementConfig.properties );					
+					ApplyConfiguredProperties( element, elementConfig.properties, elementCount );					
 				}
 				else {
 					console.log( "No position element found for element id '" + elementConfig.properties.id + "', type '" + elementConfig.type + "'" );
@@ -239,11 +234,19 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var ApplyPosition = function( element, position )
+		var ApplyPosition = function( elementConfig, pageName, elementCount )
 		{
-			// All elements are placed using fixed positioning
-			element.css( position );
-			element.css( "position", "fixed" );
+			// Find the singular element with the position-class
+			var positionElement = $( ".tactilePosition" );
+			
+			if( positionElement && positionElement.length == 1 ) {
+				positionElement.removeClass( "tactilePosition" );
+				// Set an id.
+				positionElement.attr( "id", pageName + "-" + elementConfig.type + "-" + elementCount + "-position"  );
+				// All elements are placed using fixed positioning
+				positionElement.css( elementConfig.position );
+				positionElement.css( "position", "fixed" );
+			}		
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
