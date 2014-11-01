@@ -85,7 +85,10 @@
 						"position" : {
 							"top" : 250,
 							"left": 40
-						}						
+						},
+						"size" : {
+							"width" : 500
+						}
 					}
 				]				
 			},

@@ -186,7 +186,7 @@ var UICreator = (function() {
 				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
 				var element = $( ".tactileElement" );
 				
-				ApplyPosition( elementConfig, pageName );
+				ApplyPosition( elementConfig, pageName, elementCount );
 				
 				if( element && element.length ) {				
 					element.removeClass( "tactileElement" );
@@ -196,9 +196,6 @@ var UICreator = (function() {
 					
 					ApplyDefaultProperties( element, template.properties );
 					ApplyConfiguredProperties( element, elementConfig.properties, elementCount );					
-				}
-				else {
-					console.log( "No position element found for element id '" + elementConfig.properties.id + "', type '" + elementConfig.type + "'" );
 				}
 			}
 			else {
@@ -237,16 +234,22 @@ var UICreator = (function() {
 		var ApplyPosition = function( elementConfig, pageName, elementCount )
 		{
 			// Find the singular element with the position-class
-			var positionElement = $( ".tactilePosition" );
+			var positionElement = $( ".tactilePlacement" );
 			
 			if( positionElement && positionElement.length == 1 ) {
-				positionElement.removeClass( "tactilePosition" );
+				positionElement.removeClass( "tactilePlacement" );
 				// Set an id.
 				positionElement.attr( "id", pageName + "-" + elementConfig.type + "-" + elementCount + "-position"  );
-				// All elements are placed using fixed positioning
-				positionElement.css( elementConfig.position );
-				positionElement.css( "position", "fixed" );
-			}		
+				if( elementConfig.position ) {
+					// All elements are placed using fixed positioning
+					positionElement.css( elementConfig.position );
+					positionElement.css( "position", "fixed" );
+				}
+				
+				if( elementConfig.size ) {
+					positionElement.css( elementConfig.size );
+				}
+			}
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
