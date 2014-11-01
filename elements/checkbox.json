@@ -1,0 +1,36 @@
+{
+	"checkbox" : {
+		"properties" : {
+			"data-mini" : { 
+				"desc" : "Mini version",
+				"type" : "bool",
+				"default" : "false"
+				
+			},
+			"mqtttopic" : {
+				"desc" : "MQTT Topic",
+				"type" : "string",
+				"default" : ""
+			},
+			"label" : {
+				"desc" : "Checkbox Label",
+				"type" : "string",
+				"default" : ""
+			}
+		},
+		"position" : {
+			"top" : { 
+				"desc" : "Left coordinate",
+				"type" : "int",
+				"default" : "0",
+				"suffixValue" : "px;"
+			},
+			"left" : { 
+				"desc" : "Top coordinate",
+				"type" : "int",
+				"default" : "0",
+				"suffixValue" : "px;"
+			}
+		}
+	}
+}

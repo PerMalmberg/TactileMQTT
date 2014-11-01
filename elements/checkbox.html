@@ -1,0 +1,45 @@
+<!-- We need an element we can place -->
+<div class="tactilePosition">
+	<!-- 
+	
+	All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates.
+	
+	TactileMQTT attributes:
+		* tactilePropType
+			Set this to boolean if the data type to set is boolean, otherwise leave it out.
+		* tactileElementType
+			Used as a identifier when calling functions registered via UICreator::RegisterInit() and MQTTBinder::RegisterElementCallbacks().
+			Must be the same as the 'tactileElementType'-parameter in the respective calls.
+	
+	-->
+	<label>
+	<input 
+		class="tactileElement mqttSubscriber"
+		type="checkbox"
+		tactilePropType="boolean"
+		tactileElementType="checkbox"/>
+		
+		</label>
+</div>
+<script type="text/javascript">
+
+			var SendCheckbox = function()
+			{
+				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
+			}
+					
+			MQTTBinder.Instance().RegisterElementCallbacks( 
+				"checkbox",
+				function( id, value ) { 
+					$( id ).off('change');
+					$( id ).prop( 'checked', value );
+					$( id ).checkboxradio('refresh')
+					$( id ).on( 'change', SendCheckbox );
+				}
+			);
+
+			UICreator.Instance().RegisterInit( "checkbox", function( uiData ) {
+				$( uiData.elementId ).on( 'change', SendCheckbox );
+				$(uiData.elementId).parent().append(uiData.currentElement.properties.label);
+			});
+</script>

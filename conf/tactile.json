@@ -60,6 +60,32 @@
 					},
 					{
 						"type" : "tactilemenu"
+					},
+					{
+						"type" : "checkbox",
+						"properties" :
+						{					
+							"data-mini": false,
+							"mqttTopic": "TactileMQTT/checkbox1",
+							"label": "Vardagsrum - Lampa"
+						},
+						"position" : {
+							"top" : 200,
+							"left": 40
+						}						
+					},
+					{
+						"type" : "checkbox",
+						"properties" :
+						{					
+							"data-mini": false,
+							"mqttTopic": "TactileMQTT/checkbox2",
+							"label": "Kök - Lampa"
+						},
+						"position" : {
+							"top" : 250,
+							"left": 40
+						}						
 					}
 				]				
 			},

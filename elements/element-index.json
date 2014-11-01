@@ -12,6 +12,9 @@
 		},
 		{
 			"elementName" : "tactilemenu"
+		},
+		{
+			"elementName" : "checkbox"
 		}
 	]
 }

@@ -125,7 +125,7 @@ var UICreator = (function() {
 									
 									// Has this element type registered an initialization function?									
 									if( myInitFunctions[currElem.type] ) {									
-										myInitFunctions[currElem.type]( { elementId: "#" + elementId, currentPage: pageName } );
+										myInitFunctions[currElem.type]( { elementId: "#" + elementId, currentPage: pageName, currentElement: currElem } );
 									}
 								}
 								else {
