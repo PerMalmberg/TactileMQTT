@@ -13,13 +13,12 @@
 	
 	-->
 	<label>
-	<input 
-		class="tactileElement mqttSubscriber"
-		type="checkbox"
-		tactilePropType="boolean"
-		tactileElementType="checkbox"/>
-		
-		</label>
+		<input 
+			class="tactileElement mqttSubscriber"
+			type="checkbox"
+			tactilePropType="boolean"
+			tactileElementType="checkbox"/>
+	</label>
 </div>
 <script type="text/javascript">
 
@@ -40,6 +39,6 @@
 
 			UICreator.Instance().RegisterInit( "checkbox", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendCheckbox );
-				$(uiData.elementId).parent().append(uiData.currentElement.properties.label);
+				$( uiData.elementId ).parent().append( uiData.currentElement.properties.label );
 			});
 </script>
