@@ -16,7 +16,7 @@ var MQTTBinder = (function() {
 			// Find all elements with a class of mqttSubscriber
 			var subs = $( ".mqttSubscriber" );
 			
-			subs.each( function() {
+			subs.each( function( item ) {
 				// Get the topic
 				var topic = $( this ).attr( "mqttTopic" );
 				// Get the id of this element for use as lookup
@@ -42,7 +42,7 @@ var MQTTBinder = (function() {
 					mqttBackend.Subscribe( topic );
 				}
 				else{
-					console.log( "Missing topic, id or propType" );
+					console.log( "Missing data: topic(" + (topic ? topic : "<undefined>") + "), id(" + (id ? id : "<undefined>") + ") or propType(" + (propType ? propType : "<undefined>") + ")" );
 				}
 			});
 		}

@@ -39,6 +39,9 @@
 
 			UICreator.Instance().RegisterInit( "checkbox", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendCheckbox );
-				$( uiData.elementId ).parent().append( uiData.currentElement.properties.label );
+				$( uiData.elementId ).parent().append( uiData.elementConfig.properties.label );
+				
+				var self = $( uiData.elementId );
+				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
 			});
 </script>

@@ -92,6 +92,28 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
+		this.ApplyDefaultProperties = function( element, props ) 
+		{
+			for( var key in props ) {
+				element.attr( key, props[key].default );
+			}			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.ApplyConfiguredProperties = function( element, props ) 
+		{
+			for( var key in props ) {
+				element.attr( key, props[key] );
+			}			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
 		var CreatePage = function( pageData, templateReader, htmlReader )
 		{
 			if( pageData.pageName && pageData.elements ) {
@@ -121,12 +143,20 @@ var UICreator = (function() {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
-									$( elementId ).trigger( "create" );
 									
 									// Has this element type registered an initialization function?									
 									if( myInitFunctions[currElem.type] ) {									
-										myInitFunctions[currElem.type]( { elementId: "#" + elementId, currentPage: pageName, currentElement: currElem } );
+										myInitFunctions[currElem.type]( 
+											{ 
+												elementId: "#" + elementId,
+												currentPage: pageName,
+												elementConfig: currElem,
+												templateConfig: template
+											}
+										);
 									}
+									
+									$( elementId ).trigger( "create" );
 								}
 								else {
 									console.log( "Could not get template for '" + currElem.type + "'" );
@@ -174,28 +204,27 @@ var UICreator = (function() {
 				// Create a dom object and insert it into the page
 				var dom = $.parseHTML( htmlTemplate, loadScript );
 			
-				// Where should this element be placed?
-				if( elementConfig.placement == "body" ) {
-					$( "body" ).append( dom );
-				}
-				else { 					
-					page.append( dom );
-				}
-							
-				// Find the newly added element by class
-				// TODO: Can we create the positioning element in code instead, it would simplify the element templates?
-				var element = $( ".tactileElement" );
-				
-				ApplyPosition( elementConfig, pageName, elementCount );
-				
-				if( element && element.length ) {				
+				if( dom ) {			
+					// Where should this element be placed?
+					if( elementConfig.placement == "body" ) {
+						$( "body" ).append( dom );
+					}
+					else { 					
+						page.append( dom );
+					}
+					
+					// Find the newly added element by class and remove the class
+					var element = $( ".tactileElement" );
 					element.removeClass( "tactileElement" );
 					
-					elementId = pageName + "-" + elementConfig.type + "-" + elementCount;
-					element.attr( "id", elementId ); 				
+					// Get the id from the configuration, or generate a new one. (Generation only really needed at this stage of development as the editor will set an id when creating an element)
+					elementId = ( elementConfig.properties && elementConfig.properties.id ) 
+								|| ( "Tactile" + ( new Date().getTime() ) );
 					
-					ApplyDefaultProperties( element, template.properties );
-					ApplyConfiguredProperties( element, elementConfig.properties, elementCount );					
+					
+					element.attr( "id", elementId );
+					
+					ApplyPlacement( elementConfig, template, elementId );
 				}
 			}
 			else {
@@ -204,51 +233,38 @@ var UICreator = (function() {
 			
 			return elementId;
 		}
-
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		var ApplyDefaultProperties = function( element, props ) 
-		{
-			for( var key in props ) {
-				element.attr( key, props[key].default );
-			}			
-		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var ApplyConfiguredProperties = function( element, props ) 
-		{
-			for( var key in props ) {
-				element.attr( key, props[key] );
-			}			
-		}
-		
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		var ApplyPosition = function( elementConfig, pageName, elementCount )
+		var ApplyPlacement = function( elementConfig, templateConfig, tactileId )
 		{
 			// Find the singular element with the position-class
-			var positionElement = $( ".tactilePlacement" );
+			var placementElement = $( ".tactilePlacement" );
 			
-			if( positionElement && positionElement.length == 1 ) {
-				positionElement.removeClass( "tactilePlacement" );
+			if( placementElement && placementElement.length == 1 ) {
+				placementElement.removeClass( "tactilePlacement" );
 				// Set an id.
-				positionElement.attr( "id", pageName + "-" + elementConfig.type + "-" + elementCount + "-position"  );
-				if( elementConfig.position ) {
-					// All elements are placed using fixed positioning
-					positionElement.css( elementConfig.position );
-					positionElement.css( "position", "fixed" );
+				placementElement.attr( "id", tactileId + "-position" );
+				
+				// All elements are placed using fixed positioning
+				placementElement.css( "position", "fixed" );
+				
+				// Apply default placement
+				if( templateConfig.position ) {
+					if( templateConfig.position.top && templateConfig.position.top.default ) { placementElement.css( "top", templateConfig.position.top.default ); }
+					if( templateConfig.position.left && templateConfig.position.left.default ) { placementElement.css( "left", templateConfig.position.left.default ); }
 				}
 				
-				if( elementConfig.size ) {
-					positionElement.css( elementConfig.size );
+				if( templateConfig.size ) { 
+					if( templateConfig.size.height && templateConfig.size.height.default ) { placementElement.css( "height", templateConfig.size.height.default ); }
+					if( templateConfig.size.width && templateConfig.size.width.default ) { placementElement.css( "width", templateConfig.size.width.default ); }
 				}
+				
+				// Apply configured placement
+				if( elementConfig.position ) { placementElement.css( elementConfig.position ); }				
+				if( elementConfig.size ) { placementElement.css( elementConfig.size ); }
 			}
 		}
 		

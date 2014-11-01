@@ -12,13 +12,45 @@
 			Must be the same as the 'tactileElementType'-parameter in the respective calls.
 	
 	-->
-	<div 
-		class="tactileElement mqttSubscriber"
+	<style>
+		.mqttBackendStatusCircleBase {
+			border-radius: 50%;
+			background: yellow;
+		}
+		
+		.mqttBackendStatusCircleConnected {
+			background: #2EFE2E;
+			border: 0px;
+		}
+		
+		.mqttBackendStatusCircleDisconnected {
+			background: red;
+			border: 0px;
+		}
+	</style>
+	<div
+		class="tactileElement mqttSubscriber mqttBackendStatusCircleBase"
 		tactileElementType="mqttbackendstatus"
-		tactilePropType="boolean"/>
+		tactilePropType="boolean" style="width: inherit; height: inherit;"/>
 			<script type="text/javascript">
+				UICreator.Instance().RegisterInit( "mqttbackendstatus", function( uiData ) {
+					var self = $( uiData.elementId ); 
+					UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
+					UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+				});
+			
 				// Register our update function.
 				MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
-					function( id, value ) { $( id ).text( value ? "Connected" : "Disconnected" ); } );
+					function( id, value ) {
+						if( value ) {
+							$( id ).removeClass( "mqttBackendStatusCircleDisconnected" );
+							$( id ).addClass( "mqttBackendStatusCircleConnected" );
+						}
+						else {
+							$( id ).removeClass( "mqttBackendStatusCircleConnected" );
+							$( id ).addClass( "mqttBackendStatusCircleDisconnected" );
+						}
+					}
+				);
 			</script>
 </div>

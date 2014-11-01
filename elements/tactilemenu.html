@@ -4,14 +4,14 @@
 		//
 		////////////////////////////////////////////////////////////////////////////////
 		function LoadTactileMenu( uiData )
-		{
-			var cfg = UICreator.Instance().GetConfig();
-			
-			var pages = cfg.GetPath( "page.pages" );
-			
+		{		
 			var self = $( uiData.elementId ); 
+			UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
+			UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
 			
 			// Loop the pages and build  menu with links to other pages.
+			var cfg = UICreator.Instance().GetConfig();
+			var pages = cfg.GetPath( "page.pages" );
 			for( key in pages ) {
 				var pageName = pages[key].pageName;
 				if( pageName != uiData.currentPage ) {

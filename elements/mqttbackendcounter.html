@@ -16,6 +16,12 @@
 		class="tactileElement mqttSubscriber"
 		tactileElementType="mqttbackendcounter"/>
 			<script type="text/javascript">
+				UICreator.Instance().RegisterInit( "mqttbackendcounter", function( uiData ) {
+					var self = $( uiData.elementId ); 
+					UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
+					UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+				});
+			
 				// Register our update function.
 				MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
 					function( id, value ) { $( id ).text( value ); } );

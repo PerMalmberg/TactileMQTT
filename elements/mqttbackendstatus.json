@@ -5,20 +5,34 @@
 				"desc" : "MQTT Topic",
 				"type" : "string",
 				"default" : "TactileMQTT/IsConnected"
-			}
+			},
+			"size" : {
+				"height": 25,
+				"width" : 25
+			}			
 		},
 		"position" : {
 			"top" : { 
 				"desc" : "Left coordinate",
 				"type" : "int",
-				"default" : "0",
-				"suffixValue" : "px;"
+				"default" : 0
 			},
 			"left" : { 
 				"desc" : "Top coordinate",
 				"type" : "int",
-				"default" : "0",
-				"suffixValue" : "px;"
+				"default" : 0
+			}
+		},
+		"size" : {
+			"height" : {
+				"desc" : "Height",
+				"type" : "int",
+				"default" : 25
+			},
+			"width" : {
+				"desc" : "Width",
+				"type" : "int",
+				"default" : 25
 			}
 		}
 	}

@@ -37,5 +37,9 @@
 			
 			UICreator.Instance().RegisterInit( "flipswitch", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendFlipswitch );
+				
+				var self = $( uiData.elementId );
+				UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
+				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
 			});
 </script>
