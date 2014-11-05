@@ -12,13 +12,14 @@
 			// Loop the pages and build  menu with links to other pages.
 			var cfg = UICreator.Instance().GetConfig();
 			var pages = cfg.GetPath( "page.pages" );
+			var h1 = self.find( "h1" );
 			for( key in pages ) {
 				var pageName = pages[key].pageName;
 				if( pageName != uiData.currentPage ) {
-					self.find( "h1" ).append( $.parseHTML( "<a class=\"ui-btn\" href=\"#" + pageName + "\">" + pages[key].pageTitle + "</a>" ) );
+					h1.append( $.parseHTML( "<a class=\"ui-btn\" href=\"#" + pageName + "\">" + pages[key].pageTitle + "</a>" ) );
 				}
 			}
-			
+					
 			// Set a class we can find later, based on the pageName
 			// Note, no # in the class name.
 			self.addClass( "tactileMenuFor" + uiData.currentPage );
@@ -35,8 +36,12 @@
 		{
 			// Hide all menus
 			$( ".tactileMenu" ).find( "h1" ).hide();
+			$( ".tactileMenu" ).find( "h1" ).off( 'click' );
+			
+			var toFind = ".tactileMenuFor" + hash.replace( "#", "" );
+			
 			// Find the menu to show. Remember to remove the '#' from the hash.
-			$( ".tactileMenuFor" + hash.replace( "#", "" ) ).find( "h1" ).show();
+			$( toFind ).find( "h1" ).show();			
 		}
 		
 		UICreator.Instance().RegisterInit( "tactilemenu", LoadTactileMenu );		
