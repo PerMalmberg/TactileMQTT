@@ -40,8 +40,10 @@
 					
 					// Start MQTT backend
 					mqtt.Start( cfg, null, binder.HandleMessage );
+					
+					DragManager.Instance().Init();
 				}
-			});			
+			});
 		</script>
 	</head>
 

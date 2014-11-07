@@ -34,6 +34,20 @@ var DragManager = (function() {
 			myDragEnabled = !myDragEnabled;
 		}
 		
+		this.Init = function()
+		{
+			$( window ).on( 'dblclick', function() {
+				if( !myDragEnabled ) {
+					if( confirm( "Enable edit mode?" ) ) {
+						DragManager.Instance().ToggleDrag();
+					}
+				}
+				else if( confirm( "Disable edit mode?" ) ) {
+					DragManager.Instance().ToggleDrag();
+				}
+			});
+		}
+		
 	};
 
 	// Return the same instance each time - singelton

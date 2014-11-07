@@ -23,7 +23,8 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 		var NotifyNavigationSubscribers = function()
 		{
-			var hash = location.hash;			
+			var hash = location.hash.split( "?" )[0];
+			hash = hash.replace(/^.*?(#|$)/,'');
 			for( var elementId in pageNavigationSubscribers ) {
 				pageNavigationSubscribers[elementId]( elementId, hash || "" );
 			}

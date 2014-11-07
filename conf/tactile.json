@@ -22,6 +22,7 @@
 				[ 
 					{
 						"type" : "flipswitch",
+						"id": 1,
 						"properties" :
 						{					
 							"data-mini": false,
@@ -34,6 +35,7 @@
 					},
 					{
 						"type" : "flipswitch",
+						"id": 2,
 						"properties" :
 						{					
 							"data-mini": false,
@@ -46,6 +48,7 @@
 					},
 					{
 						"type" : "mqttbackendstatus",
+						"id": 3,
 						"position" :
 						{
 							"top" : 10,
@@ -54,6 +57,7 @@
 					},
 					{
 						"type" : "mqttbackendcounter",
+						"id": 4,
 						"position" : {
 							"top" : 70,
 							"left": 100
@@ -64,6 +68,7 @@
 					},
 					{
 						"type" : "checkbox",
+						"id": 5,
 						"properties" :
 						{					
 							"data-mini": false,
@@ -77,6 +82,7 @@
 					},
 					{
 						"type" : "checkbox",
+						"id": 6,
 						"properties" :
 						{					
 							"data-mini": false,
