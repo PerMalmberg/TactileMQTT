@@ -218,11 +218,8 @@ var UICreator = (function() {
 					var element = $( ".tactileElement" );
 					element.removeClass( "tactileElement" );
 					
-					// Get the id from the configuration, or generate a new one. (Generation only really needed at this stage of development as the editor will set an id when creating an element)
-					elementId = ( elementConfig.properties && elementConfig.properties.id ) 
-								|| ( "Tactile" + ( new Date().getTime() ) );
-					
-					
+					// Get the id from the configuration
+					elementId = elementConfig.properties && elementConfig.properties.id;
 					element.attr( "id", elementId );
 					
 					ApplyPlacement( elementConfig, template, elementId );
@@ -247,7 +244,7 @@ var UICreator = (function() {
 			if( placementElement && placementElement.length == 1 ) {
 				placementElement.removeClass( "tactilePlacement" );
 				// Set an id.
-				placementElement.attr( "id", tactileId + "-position" );
+				placementElement.attr( "id", "Tactile" + tactileId + "-position" );
 				
 				// All elements are placed using fixed positioning
 				placementElement.css( "position", "fixed" );

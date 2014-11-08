@@ -24,14 +24,23 @@
 			{
 				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
 			}
+			
+			var StartEdit = function( elementId ) {
+				$( elementId ).flipswitch( "disable" );
+			}
+			
+			var EndEdit = function( elementId ) {
+				$( elementId ).flipswitch( "enable" );
+			}
+			
 					
 			MQTTBinder.Instance().RegisterElementCallbacks( 
 				"flipswitch",
 				function( id, value ) { 
-					$( id ).off('change');
-					$( id ).prop( 'checked', value );
-					$( id ).flipswitch( 'refresh' );
-					$( id ).on( 'change', SendFlipswitch );
+					$( id ).off( 'change' ); // Remove our handler so that we don't send a new message when updating our value.
+					$( id ).prop( 'checked', value ); // Set new value
+					$( id ).flipswitch( 'refresh' ); // Refresh UI.
+					$( id ).on( 'change', SendFlipswitch ); // Add handler again.
 				}
 			);
 			
@@ -41,5 +50,8 @@
 				var self = $( uiData.elementId );
 				UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
 				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+				
+				// Register start/end edit functions 
+				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartEdit, EndEdit ) );
 			});
 </script>

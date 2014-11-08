@@ -26,6 +26,14 @@
 			{
 				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
 			}
+			
+			var StartEdit = function( elementId ) {
+				$( elementId ).checkboxradio( "disable" );
+			}
+			
+			var EndEdit = function( elementId ) {
+				$( elementId ).checkboxradio( "enable" );
+			}
 					
 			MQTTBinder.Instance().RegisterElementCallbacks( 
 				"checkbox",
@@ -43,5 +51,7 @@
 				
 				var self = $( uiData.elementId );
 				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+				
+				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartEdit, EndEdit ) );
 			});
 </script>

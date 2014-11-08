@@ -15,7 +15,7 @@
 		<script src="script/ConfigReader.js"></script>
 		<script src="script/HTMLReader.js"></script>
 		
-		<script src="script/DragManager.js"></script>
+		<script src="script/EditManager.js"></script>
 		<script src="script/UICreator.js"></script>
 
 		<!-- The MQTT related scripts -->
@@ -41,7 +41,7 @@
 					// Start MQTT backend
 					mqtt.Start( cfg, null, binder.HandleMessage );
 					
-					DragManager.Instance().Init();
+					EditManager.Instance().Init( cfg );
 				}
 			});
 		</script>
