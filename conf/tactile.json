@@ -26,8 +26,8 @@
 							"mqttTopic": "TactileMQTT/myTopicQ"
 						},
 						"position": {
-							"top": 140,
-							"left": 560
+							"top": 130,
+							"left": 1195
 						}
 					},
 					{
@@ -63,7 +63,10 @@
 						}
 					},
 					{
-						"type": "tactilemenu"
+						"type": "tactilemenu",
+						"properties": {
+							"id": 7
+						}
 					},
 					{
 						"type": "checkbox",
@@ -101,7 +104,10 @@
 				"pageTitle": "TactileMQTT Demo Page 2",
 				"elements": [
 					{
-						"type": "tactilemenu"
+						"type": "tactilemenu",
+						"properties": {
+							"id": 8
+						}
 					}
 				]
 			},
@@ -110,7 +116,10 @@
 				"pageTitle": "TactileMQTT Demo Page 3",
 				"elements": [
 					{
-						"type": "tactilemenu"
+						"type": "tactilemenu",
+						"properties": {
+							"id": 9
+						}
 					}
 				]
 			}

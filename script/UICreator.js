@@ -143,13 +143,13 @@ var UICreator = (function() {
 							if( htmlReader.Read( "elements/" + templateData.elementName + ".html" ) ) {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
-									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem, i );
+									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem );
 									
 									// Has this element type registered an initialization function?									
 									if( myInitFunctions[currElem.type] ) {									
 										myInitFunctions[currElem.type]( 
 											{ 
-												elementId: "#" + elementId,
+												elementId: elementId,
 												currentPage: pageName,
 												elementConfig: currElem,
 												templateConfig: template
@@ -185,7 +185,7 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		var CreateElement = function( pageName, template, htmlTemplate, elementConfig, elementCount )
+		var CreateElement = function( pageName, template, htmlTemplate, elementConfig )
 		{
 			var elementId = null;
 		
@@ -219,10 +219,16 @@ var UICreator = (function() {
 					element.removeClass( "tactileElement" );
 					
 					// Get the id from the configuration
-					elementId = elementConfig.properties && elementConfig.properties.id;
-					element.attr( "id", elementId );
-					
-					ApplyPlacement( elementConfig, template, elementId );
+					if( elementConfig.hasOwnProperty( "properties" ) && elementConfig.properties.hasOwnProperty( "id" ) ) {
+						elementId =  elementConfig.properties.id;
+						element.attr( "id", elementId );
+						ApplyPlacement( elementConfig, template, elementId );
+						// Return id with preceding hash sign.
+						elementId = "#" + elementId;
+					}
+					else {
+						console.log( "Missing property.id on element on page '" + pageName + "'" );
+					}
 				}
 			}
 			else {
