@@ -15,6 +15,10 @@ var EditManager = (function() {
 	
 	var myEditableElements = [];
 
+	///////////////////////////////////////////////////////////////////////////////////
+	//
+	//
+	///////////////////////////////////////////////////////////////////////////////////
 	function EditManagerConstructor()
 	{
 	    this.ToggleEdit = function()
@@ -23,42 +27,19 @@ var EditManager = (function() {
 			var positions = $( "[id^='Tactile'][id$='-position']" );
 		
 			if( myEditEnabled ) {
-				positions.draggable( { disabled: true } );
-				
-				// Call EndEdit() on all registered elements
-				for( var key in myEditableElements ) {
-					var element = myEditableElements[key];
-					element.EndEdit( element.Id );
-				}
-				
-				console.log( "Disabled edit mode" );
-				
-				// Download the new config file
-				Download();				
+				DisableEdit( positions );				
 			}
 			else {		
-				positions.draggable( { 
-					disabled: false,
-					cursor: "move",
-					grid: [ 10, 10 ],
-					start: function( event, ui ) {
-						var positionElement = ui[0];
-					},
-					stop: EndDrag
-				} );
-				
-				// Call EndEdit() on all registered elements
-				for( var key in myEditableElements ) {
-					var element = myEditableElements[key];
-					element.StartEdit( element.Id );
-				}
-					
-				console.log( "Enabled edit mode" );
+				EnableEdit( positions );
 			}
 			
 			myEditEnabled = !myEditEnabled;
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
 		var EndDrag = function( event, ui )
 		{
 			var element = ui.helper[0];
@@ -91,11 +72,12 @@ var EditManager = (function() {
 				
 				if( done ) { break; }
 			}
-			
-			
-			
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
 		this.Init = function( configurationReader )
 		{
 			myConfig = configurationReader;
@@ -112,11 +94,86 @@ var EditManager = (function() {
 			});
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
 		this.RegisterEditableElement = function( editableElement )
 		{
 			myEditableElements.push( editableElement );
 		}		
 		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var DisableEdit = function( positionElements )
+		{
+			positionElements.draggable( { disabled: true } );
+				
+			// Call EndEdit() on all registered elements
+			for( var key in myEditableElements ) {
+				var element = myEditableElements[key];
+				element.EndEdit( element.Id );
+			}
+			
+			console.log( "Disabled edit mode" );
+			
+			DisableEditTools();
+			
+			// Download the new config file
+			Download();
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var EnableEdit = function( positionElements )
+		{
+			positionElements.draggable( { 
+				disabled: false,
+				cursor: "move",
+				grid: [ 10, 10 ],
+				start: function( event, ui ) {
+					var positionElement = ui[0];
+				},
+				stop: EndDrag
+			} );
+				
+			// Call StartEdit() on all registered elements
+			for( var key in myEditableElements ) {
+				var element = myEditableElements[key];
+				element.StartEdit( element.Id );
+			}
+			
+			EnableEditTools();
+				
+			console.log( "Enabled edit mode" );
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var EnableEditTools = function()
+		{
+		
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var DisableEditTools = function()
+		{
+		
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
 		var Download = function()
 		{
 			/*
