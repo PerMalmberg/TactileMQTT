@@ -23,7 +23,7 @@ var MQTTBinder = (function() {
 				var id = $( this ).attr( "id" );
 						
 				// Get the type of the property
-				var propType = $( this ).attr( "tactilePropType" ) || "string";
+				var propType = $( this ).attr( "mqttDataType" ) || "string";
 				
 				if( topic && id && propType ) {
 					if( !mySubscriptions.hasOwnProperty( topic ) ) {

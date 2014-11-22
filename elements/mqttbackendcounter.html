@@ -5,7 +5,7 @@
 	All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates.
 	
 	TactileMQTT attributes:
-		* tactilePropType
+		* mqttDataType
 			Set this to 'boolean' if the data type to set is boolean, otherwise leave it out.
 		* tactileElementType
 			Used as a identifier when calling functions registered via UICreator::RegisterInit() and MQTTBinder::RegisterElementCallbacks().
@@ -15,15 +15,16 @@
 	<div 
 		class="tactileElement mqttSubscriber"
 		tactileElementType="mqttbackendcounter"/>
-			<script type="text/javascript">
-				UICreator.Instance().RegisterInit( "mqttbackendcounter", function( uiData ) {
-					var self = $( uiData.elementId ); 
-					UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
-					UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
-				});
-			
-				// Register our update function.
-				MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
-					function( id, value ) { $( id ).text( value ); } );
-			</script>
+		<image src="/image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;"/>
 </div>
+<script type="text/javascript">
+	UICreator.Instance().RegisterInit( "mqttbackendcounter", function( uiData ) {
+		var self = $( uiData.elementId ); 
+		UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
+		UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+	});
+
+	// Register our update function.
+	MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
+		function( id, value ) { $( id ).text( value ); } );
+</script>

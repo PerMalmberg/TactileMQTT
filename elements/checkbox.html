@@ -5,20 +5,28 @@
 	All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber in their templates.
 	
 	TactileMQTT attributes:
-		* tactilePropType
+		* mqttDataType
 			Set this to boolean if the data type to set is boolean, otherwise leave it out.
 		* tactileElementType
 			Used as a identifier when calling functions registered via UICreator::RegisterInit() and MQTTBinder::RegisterElementCallbacks().
 			Must be the same as the 'tactileElementType'-parameter in the respective calls.
 	
 	-->
-	<label>
-		<input 
-			class="tactileElement mqttSubscriber"
-			type="checkbox"
-			tactilePropType="boolean"
-			tactileElementType="checkbox"/>
-	</label>
+	<table>
+		<tr>
+			<td>
+				<label>
+					<input 
+						class="tactileElement mqttSubscriber"
+						type="checkbox"
+						mqttDataType="boolean"
+						tactileElementType="checkbox"/>
+				</label>
+			</td>
+			<td>
+				<image src="/image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;"/>
+			</td>
+	</table>
 </div>
 <script type="text/javascript">
 

@@ -5,7 +5,7 @@
 	All TactileMQTT 'widgets' needs to have the classes tactileElement & mqttSubscriber (if they subscribe to MQTT messages) in their templates.
 	
 	TactileMQTT attributes:
-		* tactilePropType
+		* mqttDataType
 			Set this to 'boolean' if the data type to set is boolean, otherwise leave it out.
 		* tactileElementType
 			Used as a identifier when calling functions registered via UICreator::RegisterInit() and MQTTBinder::RegisterElementCallbacks().
@@ -28,29 +28,31 @@
 			border: 0px;
 		}
 	</style>
+	
 	<div
 		class="tactileElement mqttSubscriber mqttBackendStatusCircleBase"
 		tactileElementType="mqttbackendstatus"
-		tactilePropType="boolean" style="width: inherit; height: inherit;"/>
-			<script type="text/javascript">
-				UICreator.Instance().RegisterInit( "mqttbackendstatus", function( uiData ) {
-					var self = $( uiData.elementId ); 
-					UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
-					UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
-				});
-			
-				// Register our update function.
-				MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
-					function( id, value ) {
-						if( value ) {
-							$( id ).removeClass( "mqttBackendStatusCircleDisconnected" );
-							$( id ).addClass( "mqttBackendStatusCircleConnected" );
-						}
-						else {
-							$( id ).removeClass( "mqttBackendStatusCircleConnected" );
-							$( id ).addClass( "mqttBackendStatusCircleDisconnected" );
-						}
-					}
-				);
-			</script>
+		mqttDataType="boolean" style="width: inherit; height: inherit;"/>
+	<image src="/image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;"/>
 </div>
+<script type="text/javascript">
+	UICreator.Instance().RegisterInit( "mqttbackendstatus", function( uiData ) {
+		var self = $( uiData.elementId ); 
+		UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
+		UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+	});
+
+	// Register our update function.
+	MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
+		function( id, value ) {
+			if( value ) {
+				$( id ).removeClass( "mqttBackendStatusCircleDisconnected" );
+				$( id ).addClass( "mqttBackendStatusCircleConnected" );
+			}
+			else {
+				$( id ).removeClass( "mqttBackendStatusCircleConnected" );
+				$( id ).addClass( "mqttBackendStatusCircleDisconnected" );
+			}
+		}
+	);
+</script>

@@ -145,8 +145,11 @@ var UICreator = (function() {
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem );
 									
+									// Set an attribute enabling the EditManager to determine what type this element is.
+									$( elementId ).attr( "tactileEditType", currElem.type );
+									
 									// Has this element type registered an initialization function?									
-									if( myInitFunctions[currElem.type] ) {									
+									if( myInitFunctions[currElem.type] ) {
 										myInitFunctions[currElem.type]( 
 											{ 
 												elementId: elementId,

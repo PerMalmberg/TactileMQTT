@@ -72,6 +72,8 @@ var EditManager = (function() {
 				
 				if( done ) { break; }
 			}
+			
+			BindEditTrigger();
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -81,8 +83,26 @@ var EditManager = (function() {
 		this.Init = function( configurationReader )
 		{
 			myConfig = configurationReader;
+			BindEditTrigger();			
+		}
 		
-			$( window ).on( 'dblclick', function() {
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		this.RegisterEditableElement = function( editableElement )
+		{
+			myEditableElements.push( editableElement );
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var BindEditTrigger = function()
+		{
+			// Use event namespacing to be able to remove only this handler.
+			$( 'body' ).on( 'taphold.editManager', function() {
 				if( !myEditEnabled ) {
 					if( confirm( "Enable edit mode?" ) ) {
 						EditManager.Instance().ToggleEdit();
@@ -98,10 +118,10 @@ var EditManager = (function() {
 		//
 		//
 		///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterEditableElement = function( editableElement )
+		var UnbindEditTrigger = function()
 		{
-			myEditableElements.push( editableElement );
-		}		
+			$( 'body' ).off( 'taphold.editManager' );
+		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
 		//
@@ -109,6 +129,7 @@ var EditManager = (function() {
 		///////////////////////////////////////////////////////////////////////////////////
 		var DisableEdit = function( positionElements )
 		{
+			$( ".tactileDragHandle" ).css( 'visibility', 'hidden' );
 			positionElements.draggable( { disabled: true } );
 				
 			// Call EndEdit() on all registered elements
@@ -131,12 +152,16 @@ var EditManager = (function() {
 		///////////////////////////////////////////////////////////////////////////////////
 		var EnableEdit = function( positionElements )
 		{
+			$( ".tactileDragHandle" ).css( 'visibility', 'visible' );
+		
 			positionElements.draggable( { 
 				disabled: false,
 				cursor: "move",
-				grid: [ 10, 10 ],
+				handle: ".tactileDragHandle",
+				grid: [ 1, 1 ],
 				start: function( event, ui ) {
 					var positionElement = ui[0];
+					UnbindEditTrigger();
 				},
 				stop: EndDrag
 			} );
@@ -146,7 +171,7 @@ var EditManager = (function() {
 				var element = myEditableElements[key];
 				element.StartEdit( element.Id );
 			}
-			
+						
 			EnableEditTools();
 				
 			console.log( "Enabled edit mode" );
@@ -158,7 +183,9 @@ var EditManager = (function() {
 		///////////////////////////////////////////////////////////////////////////////////
 		var EnableEditTools = function()
 		{
-		
+			/*$( '[tactileElementType]' ).on( 'click.editManager', function( ev ) {
+				$( ev.target ).fadeOut().fadeIn();
+			});*/
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +194,7 @@ var EditManager = (function() {
 		///////////////////////////////////////////////////////////////////////////////////
 		var DisableEditTools = function()
 		{
-		
+			//$( '[tactileElementType]' ).off( 'click.editManager' );
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -175,14 +202,7 @@ var EditManager = (function() {
 		//
 		///////////////////////////////////////////////////////////////////////////////////
 		var Download = function()
-		{
-			/*
-			// Cannot set file name using data-url.
-			var url = 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent( JSON.stringify( myConfig.GetConfig(), undefined, "\t" ) );
-			window.open( url, '_blank' );
-			window.focus();
-			*/
-			
+		{	
 			var link = document.createElement('a');
 			link.download = "tactile.json";
 			link.href = 'data:,' + encodeURIComponent( JSON.stringify( myConfig.GetConfig(), undefined, "\t" ) );

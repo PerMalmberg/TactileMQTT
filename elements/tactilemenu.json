@@ -9,7 +9,7 @@
 			"data-theme" : {
 				"desc" : "Theme",
 				"type" : "string",
-				"default" : "a"
+				"default" : "b"
 			},
 			"data-fullscreen" : {
 				"desc" : "Fullscreen",
