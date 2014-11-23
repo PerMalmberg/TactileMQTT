@@ -28,12 +28,22 @@
 			border: 0px;
 		}
 	</style>
-	
-	<div
-		class="tactileElement mqttSubscriber mqttBackendStatusCircleBase"
-		tactileElementType="mqttbackendstatus"
-		mqttDataType="boolean" style="width: inherit; height: inherit;"/>
-	<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;"/>
+	<table>
+		<tr>
+			<td>
+				<div
+					class="tactileElement mqttSubscriber mqttBackendStatusCircleBase"
+					tactileElementType="mqttbackendstatus"
+					mqttDataType="boolean" style="width: 25px; height: 25px;"/>
+			</td>
+			<td>	
+				<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;" width="16" height="16"/>
+			</td>
+			<td>
+				<image src="image/icon-settings.png" class="tactileEditHandle" style="visibility: hidden;" width="16" height="16"/>
+			</td>
+		</tr>
+	</table>
 </div>
 <script type="text/javascript">
 	UICreator.Instance().RegisterInit( "mqttbackendstatus", function( uiData ) {

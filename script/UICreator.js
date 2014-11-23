@@ -226,6 +226,10 @@ var UICreator = (function() {
 						elementId =  elementConfig.properties.id;
 						element.attr( "id", elementId );
 						ApplyPlacement( elementConfig, template, elementId );
+						
+						// Setup the property edit handle, if present, to help the EditManager to find the element to edit later on.
+						$( ".tactileEditHandle", $( dom ) ).attr( "elementIdToEdit", elementId );
+						
 						// Return id with preceding hash sign.
 						elementId = "#" + elementId;
 					}

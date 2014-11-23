@@ -22,18 +22,6 @@
 				"type" : "int",
 				"default" : 0
 			}
-		},
-		"size" : {
-			"height" : {
-				"desc" : "Height",
-				"type" : "int",
-				"default" : 25
-			},
-			"width" : {
-				"desc" : "Width",
-				"type" : "int",
-				"default" : 25
-			}
 		}
 	}
 }

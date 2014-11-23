@@ -24,13 +24,12 @@ var EditManager = (function() {
 	    this.ToggleEdit = function()
 		{
 			// Find the position elements
-			var positions = $( "[id^='Tactile'][id$='-position']" );
 		
 			if( myEditEnabled ) {
-				DisableEdit( positions );				
+				DisableEdit();				
 			}
 			else {		
-				EnableEdit( positions );
+				EnableEdit();
 			}
 			
 			myEditEnabled = !myEditEnabled;
@@ -130,7 +129,9 @@ var EditManager = (function() {
 		var DisableEdit = function( positionElements )
 		{
 			$( ".tactileDragHandle" ).css( 'visibility', 'hidden' );
-			positionElements.draggable( { disabled: true } );
+			$( ".tactileEditHandle" ).css( 'visibility', 'hidden' );			
+			
+			GetPositionElements().draggable( { disabled: true } );
 				
 			// Call EndEdit() on all registered elements
 			for( var key in myEditableElements ) {
@@ -140,7 +141,8 @@ var EditManager = (function() {
 			
 			console.log( "Disabled edit mode" );
 			
-			DisableEditTools();
+			// Unbind edit property handler
+			$( '.tactileEditHandle' ).off( 'click.editProperties' );
 			
 			// Download the new config file
 			Download();
@@ -150,9 +152,12 @@ var EditManager = (function() {
 		//
 		//
 		///////////////////////////////////////////////////////////////////////////////////
-		var EnableEdit = function( positionElements )
+		var EnableEdit = function()
 		{
 			$( ".tactileDragHandle" ).css( 'visibility', 'visible' );
+			$( ".tactileEditHandle" ).css( 'visibility', 'visible' );
+		
+			var positionElements = GetPositionElements();
 		
 			positionElements.draggable( { 
 				disabled: false,
@@ -171,9 +176,12 @@ var EditManager = (function() {
 				var element = myEditableElements[key];
 				element.StartEdit( element.Id );
 			}
+			
+			// Bind edit property handler
+			$( '.tactileEditHandle' ).on( 'click.editProperties', function( ev ) {
+				OpenPropertyEditor( ev.target );
+			});
 						
-			EnableEditTools();
-				
 			console.log( "Enabled edit mode" );
 		}
 		
@@ -181,20 +189,44 @@ var EditManager = (function() {
 		//
 		//
 		///////////////////////////////////////////////////////////////////////////////////
-		var EnableEditTools = function()
+		var GetPositionElements = function()
 		{
-			/*$( '[tactileElementType]' ).on( 'click.editManager', function( ev ) {
-				$( ev.target ).fadeOut().fadeIn();
-			});*/
-		}
-		
+			return $( "[id^='Tactile'][id$='-position']" );
+		}	
+			
 		///////////////////////////////////////////////////////////////////////////////////
 		//
 		//
 		///////////////////////////////////////////////////////////////////////////////////
-		var DisableEditTools = function()
+		var OpenPropertyEditor = function( editHandle )
 		{
-			//$( '[tactileElementType]' ).off( 'click.editManager' );
+			var idToEdit = $( editHandle ).attr( "elementIdToEdit" );
+			var element = $( "#" + idToEdit );
+			var elementType = element.attr( "tactileElementType" );
+					
+			// Create a SpahQL database
+			var config = SpahQL.db( myConfig.GetConfig() );
+			// Find the element by the id
+			var elementConfig = config.select( "//elements/*[/properties/id == " + idToEdit + " ]" );
+			
+			if( elementConfig.length == 1 ) {
+				// We have found our element in the current configuration.
+				// Now read the configuration template for the element type
+				var templatePath = "elements/" + elementType + ".json";
+				var templateReader = new ConfigurationReader();		
+				if( templateReader.Read( templatePath ) ) {			
+					// Template data read, create the dialog
+					
+				}
+				else {
+					console.log( "Could not read template data for element of type: '" + elementType + "'" );
+				}
+				
+			}
+			else {
+				console.log( "Could not find element with id '" + idToEdit + "'" );
+			}
+			
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////

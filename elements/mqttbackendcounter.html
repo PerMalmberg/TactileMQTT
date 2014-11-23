@@ -12,10 +12,21 @@
 			Must be the same as the 'tactileElementType'-parameter in the respective calls.
 	
 	-->
-	<div 
-		class="tactileElement mqttSubscriber"
-		tactileElementType="mqttbackendcounter"/>
-		<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;"/>
+	<table>
+		<tr>
+			<td>
+				<div 
+					class="tactileElement mqttSubscriber"
+					tactileElementType="mqttbackendcounter"/>
+			</td>
+			<td>	
+				<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;" width="16" height="16"/>
+			</td>
+			<td>
+				<image src="image/icon-settings.png" class="tactileEditHandle" style="visibility: hidden;" width="16" height="16"/>
+			</td>
+		</tr>
+	</table>
 </div>
 <script type="text/javascript">
 	UICreator.Instance().RegisterInit( "mqttbackendcounter", function( uiData ) {
