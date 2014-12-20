@@ -108,6 +108,22 @@
 						"properties": {
 							"id": 8
 						}
+					},
+					{
+						"type": "checkbox",
+						"properties": {
+							"id": 26,
+							"data-mini": false,
+							"mqttTopic": "TactileMQTT/checkbox2",
+							"label": "Kök - Lampa"
+						},
+						"position": {
+							"top": 270,
+							"left": 560
+						},
+						"size": {
+							"width": 400
+						}
 					}
 				]
 			},

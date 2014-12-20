@@ -3,6 +3,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="script/jquery/jquery.mobile-1.4.4.min.css" />
+		<link rel="stylesheet" href="css/tactile.css" />
 
 		<!-- Our scripts depend on JQuery, so add it first of all -->
 		<script src="script/jquery/jquery-2.1.1.min.js"></script>
@@ -59,9 +60,33 @@
 		<!-- Additional pages will be created from the configuration -->
 				
 		
-		<!-- Template data. Must not contain id-attributes as it is cloned at run-time. -->
+		<!-- Template data for pages. Must not contain id-attributes as it is cloned at run-time. -->
 		<div data-role="page" class="templatePage">
 			<div role="content" class="ui-content"></div>
-		</div>
+			<div data-role="popup" id="editDialog" data-theme="a" class="ui-corner-all" data-dismissible="false">
+				<div style="padding:10px 20px">
+					<h3>Edit properties</h3>
+					<div class="elementTable">
+						<!-- The div 'editDialogRowToReplace' is replaced with the actual inputs field at runtime. -->
+						<div class="element-row" id="editDialogRowToReplace">
+							<div class="element-cell">
+								<label data-theme="a">Property</label>
+							</div>
+							<div class="element-cell">
+								<input type="text" id="un" value="" placeholder="property value" data-theme="a">
+							</div>
+						</div>				
+						<div class="element-row">
+							<div class="element-cell">&nbsp;</div>
+							<div class="element-cell">
+								<a id="editDialogOk" class="ui-btn ui-btn-inline">Ok</a>
+								<a id="editDialogCancel" class="ui-btn ui-btn-inline" data-rel="back">Cancel</a>
+							<div/>
+						<div/>
+					</div>
+				</div>
+			</div>
+			<a id='lnkDialog' href="#editDialog" data-rel="popup" data-position-to="window" data-transition="pop" style="display: none;" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-left ui-btn-a"></a>
+		</div>		
 	</body>
 </html>

@@ -214,8 +214,11 @@ var EditManager = (function() {
 				// Now read the configuration template for the element type
 				var templatePath = "elements/" + elementType + ".json";
 				var templateReader = new ConfigurationReader();		
-				if( templateReader.Read( templatePath ) ) {			
+				if( templateReader.Read( templatePath ) ) {				
 					// Template data read, create the dialog
+					CreateEditDialog( $( "#editDialog" ), templateReader );
+					// Open dialog
+					var v = $( "#lnkDialog" ).click();
 					
 				}
 				else {
@@ -227,6 +230,31 @@ var EditManager = (function() {
 				console.log( "Could not find element with id '" + idToEdit + "'" );
 			}
 			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var CreateEditDialog = function( dialogElement, templateReader )
+		{
+			var toReplace = $( dialogElement ).find( "#editDialogRowToReplace" );
+			// Build the edit labels and fields for the current element.
+			// NOTE: the new content must have the id 'editDialogRowToReplace' so that
+			// it can be found the next time the editor is to be opened.
+						
+			var editContent = '<div class="element-row" id="editDialogRowToReplace">\
+					<div class="element-cell">\
+						<label data-theme="a">Property2</label>\
+					</div>\
+					<div class="element-cell">\
+						<input type="text" id="un" value="" placeholder="property2 value" data-theme="a">\
+					</div>\
+				</div>'
+				
+			
+			// And replace the editor template with this data.
+			toReplace.replaceWith( editContent );
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////

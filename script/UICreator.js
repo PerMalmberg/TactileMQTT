@@ -23,7 +23,11 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 		var NotifyNavigationSubscribers = function()
 		{
+			// The hash is the first part
 			var hash = location.hash.split( "?" )[0];
+			// Now remove and paramters (i.e. &param=value
+			hash = hash.split( "&" )[0];
+			// Remove starting #-sign
 			hash = hash.replace(/^.*?(#|$)/,'');
 			for( var elementId in pageNavigationSubscribers ) {
 				pageNavigationSubscribers[elementId]( elementId, hash || "" );
