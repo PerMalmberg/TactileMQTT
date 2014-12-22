@@ -14,18 +14,18 @@
 			"data-mini" : { 
 				"desc" : "Mini version",
 				"type" : "bool",
-				"default" : "false"
+				"default" : false
 				
 			},
 			"data-theme" : {
 				"desc" : "Theme",
 				"type" : "string",
-				"default" : ""
+				"default" : "a"
 			},
 			"mqtttopic" : {
 				"desc" : "MQTT Topic",
 				"type" : "string",
-				"default" : ""
+				"default" : "your/topic"
 			}
 		},
 		"position" : {

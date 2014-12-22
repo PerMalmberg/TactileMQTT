@@ -115,6 +115,16 @@ var UICreator = (function() {
 			}			
 		}
 		
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.Reinitialize = function( elementId, properties )
+		{
+			this.ApplyConfiguredProperties( $( "#" + elementId ), properties );			
+		}
+		
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
@@ -148,10 +158,7 @@ var UICreator = (function() {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem );
-									
-									// Set an attribute enabling the EditManager to determine what type this element is.
-									$( elementId ).attr( "tactileEditType", currElem.type );
-									
+																
 									// Has this element type registered an initialization function?									
 									if( myInitFunctions[currElem.type] ) {
 										myInitFunctions[currElem.type]( 
@@ -187,7 +194,7 @@ var UICreator = (function() {
 				console.log( "Page does not contain pageName and/or elements" );
 			}
 		}
-		
+				
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //

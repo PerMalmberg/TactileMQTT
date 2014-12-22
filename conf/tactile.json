@@ -23,7 +23,7 @@
 						"properties": {
 							"id": 1,
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopicQ"
+							"mqtttopic": "TactileMQTT/myTopicQ"
 						},
 						"position": {
 							"top": 130,
@@ -35,7 +35,7 @@
 						"properties": {
 							"id": 2,
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/myTopicQQ"
+							"mqtttopic": "TactileMQTT/myTopicQQ"
 						},
 						"position": {
 							"top": 180,
@@ -73,7 +73,7 @@
 						"properties": {
 							"id": 5,
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/checkbox1",
+							"mqtttopic": "TactileMQTT/checkbox1",
 							"label": "Vardagsrum - Lampa"
 						},
 						"position": {
@@ -86,7 +86,7 @@
 						"properties": {
 							"id": 6,
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/checkbox2",
+							"mqtttopic": "TactileMQTT/checkbox2",
 							"label": "Kök - Lampa"
 						},
 						"position": {
@@ -114,7 +114,7 @@
 						"properties": {
 							"id": 26,
 							"data-mini": false,
-							"mqttTopic": "TactileMQTT/checkbox2",
+							"mqtttopic": "TactileMQTT/checkbox2",
 							"label": "Kök - Lampa"
 						},
 						"position": {

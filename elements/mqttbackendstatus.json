@@ -5,10 +5,6 @@
 				"desc" : "MQTT Topic",
 				"type" : "string",
 				"default" : "TactileMQTT/IsConnected"
-			},
-			"size" : {
-				"height": 25,
-				"width" : 25
 			}			
 		},
 		"position" : {
@@ -22,6 +18,10 @@
 				"type" : "int",
 				"default" : 0
 			}
+		},
+		"size" : {
+			"height": 50,
+			"width" : 25
 		}
 	}
 }

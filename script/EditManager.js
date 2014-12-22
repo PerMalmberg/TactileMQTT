@@ -12,6 +12,9 @@ var EditManager = (function() {
 	var myInstance = null;
 	var myEditEnabled = false;
 	var myConfig = null;
+	var currentEditElementConfig = null;
+	var currentEditElementId = 0;
+	
 	
 	var myEditableElements = [];
 
@@ -200,26 +203,26 @@ var EditManager = (function() {
 		///////////////////////////////////////////////////////////////////////////////////
 		var OpenPropertyEditor = function( editHandle )
 		{
-			var idToEdit = $( editHandle ).attr( "elementIdToEdit" );
-			var element = $( "#" + idToEdit );
+			currentEditElementId = $( editHandle ).attr( "elementIdToEdit" );
+			var element = $( "#" + currentEditElementId );
 			var elementType = element.attr( "tactileElementType" );
 					
 			// Create a SpahQL database
 			var config = SpahQL.db( myConfig.GetConfig() );
-			// Find the element by the id
-			var elementConfig = config.select( "//elements/*[/properties/id == " + idToEdit + " ]" );
 			
-			if( elementConfig.length == 1 ) {
+			// Find the element by the id
+			var foundConfig = config.select( "//elements/*[/properties/id == " + currentEditElementId + " ]" );
+			
+			
+			if( foundConfig.length == 1 ) {
+				currentEditElementConfig = foundConfig[0].value;
 				// We have found our element in the current configuration.
 				// Now read the configuration template for the element type
 				var templatePath = "elements/" + elementType + ".json";
 				var templateReader = new ConfigurationReader();		
 				if( templateReader.Read( templatePath ) ) {				
 					// Template data read, create the dialog
-					CreateEditDialog( $( "#editDialog" ), templateReader );
-					// Open dialog
-					var v = $( "#lnkDialog" ).click();
-					
+					OpenEditDialog( templateReader.GetPath( elementType ), currentEditElementConfig );
 				}
 				else {
 					console.log( "Could not read template data for element of type: '" + elementType + "'" );
@@ -227,7 +230,8 @@ var EditManager = (function() {
 				
 			}
 			else {
-				console.log( "Could not find element with id '" + idToEdit + "'" );
+				currentEditElementConfig = null;
+				console.log( "Could not find element with id '" + currentEditElementId + "'" );
 			}
 			
 		}
@@ -236,25 +240,88 @@ var EditManager = (function() {
 		//
 		//
 		///////////////////////////////////////////////////////////////////////////////////
-		var CreateEditDialog = function( dialogElement, templateReader )
+		var OpenEditDialog = function( templateData, currentConfig )
 		{
-			var toReplace = $( dialogElement ).find( "#editDialogRowToReplace" );
+			// Find dialog element we will update with new input fields.
+			var table = $( "#editDialog" ).find( "#fields" );
+			// Build the input fields.
+			BuildPropertyEditor( templateData, table, currentConfig );	
+			// Open dialog
+			$( "#lnkDialog" ).click();
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var BuildPropertyEditor = function( templateData, table, currentConfig )
+		{
+			// Clear any old fields
+			var prev = $( "#editDialog" ).find( "#editDialogRow" );
+			while( prev.length > 0 ) {
+				prev.remove();
+				prev = $( "#editDialog" ).find( "#editDialogRow" );
+			}
+			$( "#editDialog" ).find( "#editorButtons" ).remove();
+		
 			// Build the edit labels and fields for the current element.
-			// NOTE: the new content must have the id 'editDialogRowToReplace' so that
-			// it can be found the next time the editor is to be opened.
-						
-			var editContent = '<div class="element-row" id="editDialogRowToReplace">\
-					<div class="element-cell">\
-						<label data-theme="a">Property2</label>\
-					</div>\
-					<div class="element-cell">\
-						<input type="text" id="un" value="" placeholder="property2 value" data-theme="a">\
-					</div>\
-				</div>'
-				
+			var htmlReader = new HTMLReader( "text" );
+			htmlReader.Read( "script/ElementEditorTemplateRow.html" );
+			var rowTmpl = $.parseHTML( htmlReader.Get() );
+			htmlReader.Read( "script/ElementEditorTemplatePropertyField.html" );
+			var fieldTmpl = $.parseHTML( htmlReader.Get(), false );
+			htmlReader.Read( "script/ElementEditorTemplateButtons.html" );
+			var buttonTmpl = $.parseHTML( htmlReader.Get(), false );
 			
-			// And replace the editor template with this data.
-			toReplace.replaceWith( editContent );
+			for( var prop in templateData["properties"] ) {
+				var curr = templateData["properties"][prop];
+				// Add row and cells
+				var row = rowTmpl[0].cloneNode( true );
+				var fields = fieldTmpl[0].cloneNode( true ).innerHTML;
+				row.innerHTML = fields;
+				table.append( row );
+				// Update cell label
+				$( row ).find( "#label" ).text( curr.desc );
+				// Update property value
+				var currValue = currentConfig.properties[prop];
+				var editBox = $( row ).find( "#value" );
+				editBox.attr( "id", "userSetValue" + prop );
+				if( typeof currValue == "undefined" || currValue == curr.default ) {
+					// Display default value
+					editBox.attr( "value", curr.default );
+				}
+				else {
+					// Display current value
+					editBox.attr( "value", currValue );					
+				}
+			}
+			
+			table.append( buttonTmpl );
+			// Bind response methods to buttons
+			$( table ).find( "#editDialogOk" ).on( "click", ApplyNewConfig );
+			$( table ).find( "#editDialogCancel" ).on( "click", RemoveEditRepsonseFunctions );
+		}
+		
+		var ApplyNewConfig = function()
+		{
+			RemoveEditRepsonseFunctions();			
+			// Update model data
+			var target = currentEditElementConfig.properties;
+			for( var key in target ) {
+				var source = $( "#userSetValue" + key );
+				if( source.length == 1 ) {
+					target[key] = source[0].value;
+				}
+			}		
+			
+			// Update view
+			// qqq UICreator.Instance().Reinitialize( currentEditElementId, target );
+		}
+		
+		var RemoveEditRepsonseFunctions = function()
+		{
+			$( "#editDialog" ).find( "#editDialogOk" ).off( "click" );
+			$( "#editDialog" ).find( "#editDialogCancel" ).off( "click" );
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////

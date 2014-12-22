@@ -4,7 +4,7 @@
 			"data-mini" : { 
 				"desc" : "Mini version",
 				"type" : "bool",
-				"default" : "false"
+				"default" : false
 				
 			},
 			"mqtttopic" : {

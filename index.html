@@ -66,24 +66,7 @@
 			<div data-role="popup" id="editDialog" data-theme="a" class="ui-corner-all" data-dismissible="false">
 				<div style="padding:10px 20px">
 					<h3>Edit properties</h3>
-					<div class="elementTable">
-						<!-- The div 'editDialogRowToReplace' is replaced with the actual inputs field at runtime. -->
-						<div class="element-row" id="editDialogRowToReplace">
-							<div class="element-cell">
-								<label data-theme="a">Property</label>
-							</div>
-							<div class="element-cell">
-								<input type="text" id="un" value="" placeholder="property value" data-theme="a">
-							</div>
-						</div>				
-						<div class="element-row">
-							<div class="element-cell">&nbsp;</div>
-							<div class="element-cell">
-								<a id="editDialogOk" class="ui-btn ui-btn-inline">Ok</a>
-								<a id="editDialogCancel" class="ui-btn ui-btn-inline" data-rel="back">Cancel</a>
-							<div/>
-						<div/>
-					</div>
+					<div class="elementTable" id="fields"/>
 				</div>
 			</div>
 			<a id='lnkDialog' href="#editDialog" data-rel="popup" data-position-to="window" data-transition="pop" style="display: none;" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-left ui-btn-a"></a>
