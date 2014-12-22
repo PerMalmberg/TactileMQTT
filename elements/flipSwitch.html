@@ -51,9 +51,21 @@
 				
 				var self = $( uiData.elementId );
 				UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
-				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
 				
 				// Register start/end edit functions 
 				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartEdit, EndEdit ) );
+			});
+			
+			UICreator.Instance().RegisterSetProperties( "flipswitch", function( uiData ) {		
+				var self = $( uiData.elementId );
+				try {
+					debugger;
+					self.flipswitch( "option", "offText", uiData.elementConfig.properties["data-on-text"] );
+					self.flipswitch( "option", "onText", uiData.elementConfig.properties["data-off-text"] );
+				}
+				catch(e) {}
+				
+				
+				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );				
 			});
 </script>

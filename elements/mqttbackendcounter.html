@@ -37,5 +37,8 @@
 
 	// Register our update function.
 	MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
-		function( id, value ) { $( id ).text( value ); } );
+		function( id, value ) { 
+			$( id ).text( value ); 
+		}
+	);
 </script>

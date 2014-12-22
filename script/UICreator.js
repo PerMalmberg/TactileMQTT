@@ -5,6 +5,7 @@ var UICreator = (function() {
 	var includedElementScripts = [];
 	var myLandingPage = null;
 	var myInitFunctions = {};
+	var mySetPropertiesFunction = {};
 	var pageNavigationSubscribers = {};
 
 	///////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +76,11 @@ var UICreator = (function() {
 			myInitFunctions[elementType] = func;
 		}
 		
+		this.RegisterSetProperties = function( elementType, func )
+		{
+			mySetPropertiesFunction[elementType] = func;
+		}
+		
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
@@ -122,7 +128,17 @@ var UICreator = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 		this.Reinitialize = function( elementId, properties )
 		{
-			this.ApplyConfiguredProperties( $( "#" + elementId ), properties );			
+			var elementType = $( "#" + elementId ).attr( "tactileEditType" );
+			
+			// Has this element type registered a set properties function?
+			if( mySetPropertiesFunction[elementType] ) {
+				mySetPropertiesFunction[elementType](
+					{
+						elementId: "#" + elementId,
+						elementConfig: properties
+					}
+				);
+			}
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +174,10 @@ var UICreator = (function() {
 								var template = templateReader.GetPath( currElem.type );
 								if( template ) {
 									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem );
+									
+                                    // Set an attribute enabling the EditManager to determine what type this element is.
+                                    $( elementId ).attr( "tactileEditType", currElem.type );
+
 																
 									// Has this element type registered an initialization function?									
 									if( myInitFunctions[currElem.type] ) {
@@ -167,6 +187,16 @@ var UICreator = (function() {
 												currentPage: pageName,
 												elementConfig: currElem,
 												templateConfig: template
+											}
+										);
+									}
+									
+									// Has this element type registered a set properties function?
+									if( mySetPropertiesFunction[currElem.type] ) {
+										mySetPropertiesFunction[currElem.type](
+											{
+												elementId: elementId,
+												elementConfig: currElem
 											}
 										);
 									}

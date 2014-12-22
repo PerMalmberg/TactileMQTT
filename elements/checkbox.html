@@ -15,13 +15,12 @@
 	<div class="elementTable">
 		<div class="element-row">
 			<div class="element-cell">
-				<label>
-					<input 
-						class="tactileElement mqttSubscriber"
-						type="checkbox"
-						mqttDataType="boolean"
-						tactileElementType="checkbox"/>
-				</label>
+				<input 
+					class="tactileElement mqttSubscriber"
+					type="checkbox"
+					mqttDataType="boolean"
+					tactileElementType="checkbox"/>
+				<label class="checkBoxLabel" />
 			</div>
 			<div class="element-cell">
 				<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;" width="16" height="16"/>
@@ -59,11 +58,16 @@
 
 			UICreator.Instance().RegisterInit( "checkbox", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendCheckbox );
-				$( uiData.elementId ).parent().append( uiData.elementConfig.properties.label );
-				
-				var self = $( uiData.elementId );
-				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
-				
 				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartEdit, EndEdit ) );
+			});
+			
+			UICreator.Instance().RegisterSetProperties( "checkbox", function( uiData ) {
+				var self = $( uiData.elementId );
+				var cell = self.parent();
+				var label = $( ".checkBoxLabel", cell );
+				label.text( uiData.elementConfig.properties.label );
+				label.attr( "for", uiData.elementConfig.properties.id );				
+				
+				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
 			});
 </script>

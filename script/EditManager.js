@@ -14,6 +14,7 @@ var EditManager = (function() {
 	var myConfig = null;
 	var currentEditElementConfig = null;
 	var currentEditElementId = 0;
+	var currentEditTemplate = null;
 	
 	
 	var myEditableElements = [];
@@ -264,6 +265,8 @@ var EditManager = (function() {
 			}
 			$( "#editDialog" ).find( "#editorButtons" ).remove();
 		
+			currentEditTemplate = templateData;
+		
 			// Build the edit labels and fields for the current element.
 			var htmlReader = new HTMLReader( "text" );
 			htmlReader.Read( "script/ElementEditorTemplateRow.html" );
@@ -307,7 +310,7 @@ var EditManager = (function() {
 			RemoveEditRepsonseFunctions();			
 			// Update model data
 			var target = currentEditElementConfig.properties;
-			for( var key in target ) {
+			for( var key in currentEditTemplate.properties ) {
 				var source = $( "#userSetValue" + key );
 				if( source.length == 1 ) {
 					target[key] = source[0].value;
@@ -315,7 +318,7 @@ var EditManager = (function() {
 			}		
 			
 			// Update view
-			// qqq UICreator.Instance().Reinitialize( currentEditElementId, target );
+			UICreator.Instance().Reinitialize( currentEditElementId, currentEditElementConfig );
 		}
 		
 		var RemoveEditRepsonseFunctions = function()
