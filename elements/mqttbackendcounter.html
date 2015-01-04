@@ -36,7 +36,7 @@
 	});
 
 	// Register our update function.
-	MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendcounter",
+	MQTTBinder.Instance().RegisterValueChangeCallback( "mqttbackendcounter",
 		function( id, value ) { 
 			$( id ).text( value ); 
 		}

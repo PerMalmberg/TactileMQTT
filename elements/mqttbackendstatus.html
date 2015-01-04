@@ -53,7 +53,7 @@
 	});
 
 	// Register our update function.
-	MQTTBinder.Instance().RegisterElementCallbacks( "mqttbackendstatus",
+	MQTTBinder.Instance().RegisterValueChangeCallback( "mqttbackendstatus",
 		function( id, value ) {
 			if( value ) {
 				$( id ).removeClass( "mqttBackendStatusCircleDisconnected" );

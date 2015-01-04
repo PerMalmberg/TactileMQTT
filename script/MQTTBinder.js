@@ -92,9 +92,9 @@ var MQTTBinder = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterElementCallbacks = function( elementType, updateVal )
+		this.RegisterValueChangeCallback = function( elementTypeName, updateVal )
 		{
-			myElementCallback[elementType] = { updateVal: updateVal };
+			myElementCallback[elementTypeName] = { updateVal: updateVal };
 		}
 	};
 

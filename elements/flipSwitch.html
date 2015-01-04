@@ -36,7 +36,7 @@
 			}
 			
 					
-			MQTTBinder.Instance().RegisterElementCallbacks( 
+			MQTTBinder.Instance().RegisterValueChangeCallback( 
 				"flipswitch",
 				function( id, value ) { 
 					$( id ).off( 'change' ); // Remove our handler so that we don't send a new message when updating our value.
@@ -59,7 +59,6 @@
 			UICreator.Instance().RegisterSetProperties( "flipswitch", function( uiData ) {		
 				var self = $( uiData.elementId );
 				try {
-					debugger;
 					self.flipswitch( "option", "offText", uiData.elementConfig.properties["data-on-text"] );
 					self.flipswitch( "option", "onText", uiData.elementConfig.properties["data-off-text"] );
 				}

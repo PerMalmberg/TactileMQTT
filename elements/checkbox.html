@@ -46,7 +46,7 @@
 				$( elementId ).checkboxradio( "enable" );
 			}
 					
-			MQTTBinder.Instance().RegisterElementCallbacks( 
+			MQTTBinder.Instance().RegisterValueChangeCallback( 
 				"checkbox",
 				function( id, value ) { 
 					$( id ).off('change');
