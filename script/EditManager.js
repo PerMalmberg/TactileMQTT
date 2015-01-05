@@ -15,9 +15,11 @@ var EditManager = (function() {
 	var currentEditElementConfig = null;
 	var currentEditElementId = 0;
 	var currentEditTemplate = null;
+	var myCfg = null;
 	
 	
 	var myEditableElements = [];
+	var editMenuPos = {};
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -25,6 +27,9 @@ var EditManager = (function() {
 	///////////////////////////////////////////////////////////////////////////////////
 	function EditManagerConstructor()
 	{
+		myCfg = new ConfigurationReader();
+		myCfg.Read( "elements/element-index.json" );
+	
 	    this.ToggleEdit = function()
 		{
 			// Find the position elements
@@ -37,6 +42,15 @@ var EditManager = (function() {
 			}
 			
 			myEditEnabled = !myEditEnabled;
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		this.IsEditing = function()
+		{
+			return myEditEnabled;
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +129,88 @@ var EditManager = (function() {
 					EditManager.Instance().ToggleEdit();
 				}
 			});
+			
+			// Custom menu based on StackOverflow answer: http://stackoverflow.com/questions/4495626/making-custom-right-click-context-menus-for-my-web-app 
+			$( document ).bind( "contextmenu", function( event ) {
+				
+				// Avoid the real one
+				event.preventDefault();
+				
+				if( EditManager.Instance().IsEditing() ) {				
+					// Show contextmenu
+					BuildAddElementMenu();
+					
+					editMenuPos.X = event.pageX;
+					editMenuPos.Y = event.pageY;
+					
+					$( ".editManager-menu" ).finish().toggle( 100 ).css(
+						// In the right position (the mouse)
+						{
+							top: event.pageY + "px",
+							left: event.pageX + "px"
+						}
+					);
+				}
+			});
+			
+			// If the document is clicked somewhere
+			$( document ).bind( "mousedown", function( e ) {
+				// If the clicked element is not the menu
+				if( $( e.target ).parents( ".editManager-menu" ).length == 0) {					
+					// Hide it
+					$(".editManager-menu").hide(100);
+				}
+			});			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var BuildAddElementMenu = function()
+		{
+			var menu = $( ".editManager-menu" );
+			menu.empty();
+			
+			if( myCfg.IsValid() ) {						
+				var elements = myCfg.GetPath( "elements" );
+				for( var item in elements ) {
+					AddElementMenu( elements[item].elementName, elements[item].description );
+				}
+			}
+			else {
+				AddElementMenu( "NoType", "Could not read element types, see debug output" );
+			}
+			
+			// Setup event for clicks on menu items.
+			$(".editManager-menu li").click( function() {
+				// Hide menu
+				$(".editManager-menu").hide( 0 );
+				
+				// This is the triggered action name
+				AddElement( $(this).attr( "data-action" ) );				
+			} );
+			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var AddElementMenu = function( typeName, title )
+		{
+			var menu = $( ".editManager-menu" );
+			menu.append( "<li data-action='" + typeName + "'>" + title + "</li>" );
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var AddElement = function( elementType ) 
+		{
+			// Add an instance of the provided element type to the current page.
+			UICreator.Instance().AddNewElement( elementType, editMenuPos.X, editMenuPos.Y );
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////

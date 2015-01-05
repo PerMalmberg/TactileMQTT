@@ -2,19 +2,24 @@
 	"elements":
 	[
 		{ 
-			"elementName" : "flipswitch"
+			"elementName" : "flipswitch",
+			"description" : "Flip Switch"
 		},
 		{
-			"elementName" : "mqttbackendstatus"
+			"elementName" : "mqttbackendstatus",
+			"description" : "MQTT Backend Status"
 		},
 		{
-			"elementName" : "mqttbackendcounter"
+			"elementName" : "mqttbackendcounter",
+			"description" : "MQTT Backend Counter"
 		},
 		{
-			"elementName" : "tactilemenu"
+			"elementName" : "tactilemenu",
+			"description" : "Page Menu"
 		},
 		{
-			"elementName" : "checkbox"
+			"elementName" : "checkbox",
+			"description" : "Checkbox"
 		}
 	]
 }

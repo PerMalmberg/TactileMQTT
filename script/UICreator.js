@@ -7,6 +7,7 @@ var UICreator = (function() {
 	var myInitFunctions = {};
 	var mySetPropertiesFunction = {};
 	var pageNavigationSubscribers = {};
+	var myCurrentPage = null;
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -30,15 +31,18 @@ var UICreator = (function() {
 			hash = hash.split( "&" )[0];
 			// Remove starting #-sign
 			hash = hash.replace(/^.*?(#|$)/,'');
+			
+			myCurrentPage = hash;
+			
 			for( var elementId in pageNavigationSubscribers ) {
-				pageNavigationSubscribers[elementId]( elementId, hash || "" );
+				pageNavigationSubscribers[elementId]( elementId, myCurrentPage || "" );
 			}
 		}
 		
 		// Hook the page navigation event
 		$( window ).hashchange( NotifyNavigationSubscribers );
 		
-		// Hook the loaded event
+		// Hook the ready event
 		$( window ).ready( NotifyNavigationSubscribers );
 						
 		///////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +69,52 @@ var UICreator = (function() {
 					EnableUI();	
 				}				
 			}
+		}
+		
+		this.AddNewElement = function( elementType, xPos, yPos )
+		{
+			debugger;
+			// Find the current page in the configuration
+			var db = SpahQL.db( myCfg.GetConfig() );
+			var query = "/page/pages/*[/pageName == '" + myCurrentPage + "']";
+			var currPage = db.select( query );
+			// Add a new element to this page.
+			
+			var templateData = FindElementTemplate( elementType );
+			if( templateData ) {	
+				var templateReader = new ConfigurationReader();
+				if( templateReader.Read( "elements/" + elementType + ".json" ) ) {
+					var templateConfig = templateReader.GetPath( elementType );
+
+					// Prepare a new configuration object.
+					var newCfg = {
+						type : elementType,
+						properties : {
+							id : (new Date().getTime()).toString() // Create a new unique id.
+						},
+						position : {
+							top: yPos,
+							left: xPos
+						},
+						size : {}
+					};
+									
+					for( var prop in templateConfig["properties"] ) {
+						newCfg.properties[prop] = templateConfig["properties"][prop].default;
+					}
+					
+					for( var prop in templateConfig["size"] ) {
+						newCfg.size[prop] = templateConfig["size"][prop];
+					}
+					
+					// Add new element configuration to the data model.
+					currPage.value().elements.push( newCfg );
+					
+					// Create the view
+				}
+			}	
+			
+			
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////

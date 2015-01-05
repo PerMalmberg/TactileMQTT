@@ -30,6 +30,11 @@ function ConfigurationReader() {
 
 		return myIsValid;
 	}
+	
+	this.IsValid = function()
+	{
+		return myIsValid;
+	}
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
