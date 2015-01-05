@@ -4,6 +4,7 @@ var MQTTBinder = (function() {
 	var myInstance = null;
 	var mySubscriptions = {};
 	var myElementCallback = {};
+	var myMqttBackend = null;
 
 	function MQTTBinderConstructor()
 	{
@@ -13,6 +14,8 @@ var MQTTBinder = (function() {
 	    ///////////////////////////////////////////////////////////////////////////////////
 	    this.Bind = function( mqttBackend )
 	    {
+			myMqttBackend = mqttBackend;
+			
 			// Find all elements with a class of mqttSubscriber
 			var subs = $( ".mqttSubscriber" );
 			
@@ -46,7 +49,23 @@ var MQTTBinder = (function() {
 				}
 			});
 		}
-
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.Rebind = function()
+		{
+			if( myMqttBackend != null ) {
+				myMqttBackend.Reset();			
+				
+				this.mySubscriptions = {};
+				this.myElementCallback = {};
+			
+				// Rebind
+				this.Bind( myMqttBackend );
+			}			
+		}
 		
 	    ///////////////////////////////////////////////////////////////////////////////////
 	    //

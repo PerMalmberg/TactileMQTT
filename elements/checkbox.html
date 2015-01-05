@@ -65,9 +65,25 @@
 				var self = $( uiData.elementId );
 				var cell = self.parent();
 				var label = $( ".checkBoxLabel", cell );
-				label.text( uiData.elementConfig.properties.label );
-				label.attr( "for", uiData.elementConfig.properties.id );				
 				
-				UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+				// Default props
+				var labelText = uiData.defaultConfig.select( "/properties/label/default" );
+				if( labelText.length == 1 ) {
+					label.text( labelText[0].value );
+				}
+				
+				UICreator.Instance().SetElementAttribute( self, "mqttTopic", "/properties/mqtttopic/default", uiData.defaultConfig );
+				UICreator.Instance().SetElementAttribute( self, "data-mini", "/properties/data-mini/default", uiData.defaultConfig );				
+				
+				// Current props
+				UICreator.Instance().SetElementAttribute( label, "for", "/properties/id", uiData.elementConfig );				
+				
+				labelText = uiData.elementConfig.select( "/properties/label" );
+				if( labelText.length == 1 ) {
+					label.text( labelText[0].value );
+				}
+				
+				UICreator.Instance().SetElementAttribute( self, "mqttTopic", "/properties/mqtttopic", uiData.elementConfig );
+				UICreator.Instance().SetElementAttribute( self, "data-mini", "/properties/data-mini", uiData.elementConfig );
 			});
 </script>

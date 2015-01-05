@@ -4,8 +4,8 @@
 	},
 	"mqtt": {
 		"comment": "Connection details for MQTT backend. Leave user and passwords blank if not used",
-		"host": "broker.mqtt-dashboard.com",
-		"port": 8000,
+		"host": "test.mosquitto.org",
+		"port": 8080,
 		"user": "",
 		"password": "",
 		"connectionTimeout": 10,

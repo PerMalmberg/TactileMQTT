@@ -318,7 +318,10 @@ var EditManager = (function() {
 			}		
 			
 			// Update view
-			UICreator.Instance().Reinitialize( currentEditElementId, currentEditElementConfig );
+			UICreator.Instance().Reinitialize( currentEditElementId, currentEditElementConfig, currentEditTemplate );
+			
+			// Rebind MQTT events
+			MQTTBinder.Instance().Rebind();
 		}
 		
 		var RemoveEditRepsonseFunctions = function()

@@ -14,7 +14,7 @@
 			"data-fullscreen" : {
 				"desc" : "Fullscreen",
 				"type" : "boolean",
-				"default" : "true" 
+				"default" : true
 			},
 			"data-position" : {
 				"desc" : "Positioning",

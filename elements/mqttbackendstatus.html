@@ -47,9 +47,16 @@
 </div>
 <script type="text/javascript">
 	UICreator.Instance().RegisterInit( "mqttbackendstatus", function( uiData ) {
-		var self = $( uiData.elementId ); 
-		UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
-		UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
+		// var self = $( uiData.elementId ); 
+	});
+	
+	UICreator.Instance().RegisterSetProperties( "mqttbackendstatus", function( uiData ) {
+		var self = $( uiData.elementId );
+		// Default props
+		UICreator.Instance().SetElementAttribute( self, "mqttTopic", "/properties/mqtttopic/default", uiData.defaultConfig );
+		
+		// Current props
+		UICreator.Instance().SetElementAttribute( self, "mqttTopic", "/properties/mqtttopic", uiData.elementConfig );
 	});
 
 	// Register our update function.

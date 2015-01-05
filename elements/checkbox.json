@@ -15,7 +15,7 @@
 			"label" : {
 				"desc" : "Checkbox Label",
 				"type" : "string",
-				"default" : ""
+				"default" : "Your label text"
 			}
 		},
 		"position" : {

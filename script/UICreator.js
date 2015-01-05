@@ -26,7 +26,7 @@ var UICreator = (function() {
 		{
 			// The hash is the first part
 			var hash = location.hash.split( "?" )[0];
-			// Now remove and paramters (i.e. &param=value
+			// Now remove and parameters (i.e. &param=value)
 			hash = hash.split( "&" )[0];
 			// Remove starting #-sign
 			hash = hash.replace(/^.*?(#|$)/,'');
@@ -98,35 +98,12 @@ var UICreator = (function() {
 		{
 			return myCfg;
 		}
-		
+				
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
-		this.ApplyDefaultProperties = function( element, props ) 
-		{
-			for( var key in props ) {
-				element.attr( key, props[key].default );
-			}			
-		}
-		
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		this.ApplyConfiguredProperties = function( element, props ) 
-		{
-			for( var key in props ) {
-				element.attr( key, props[key] );
-			}			
-		}
-		
-		
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		this.Reinitialize = function( elementId, properties )
+		this.Reinitialize = function( elementId, properties, defaultConfig )
 		{
 			var elementType = $( "#" + elementId ).attr( "tactileEditType" );
 			
@@ -135,9 +112,26 @@ var UICreator = (function() {
 				mySetPropertiesFunction[elementType](
 					{
 						elementId: "#" + elementId,
-						elementConfig: properties
+						elementConfig: SpahQL.db( properties ),
+						defaultConfig: SpahQL.db( defaultConfig )
 					}
 				);
+			}
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    // element is a pre-selected element
+		// attribute is the name of the attribute to set on the 'element'
+		// configPath is the path to where the data is found in the 'sourceDb'
+		// sourceDb is a SpahQL object
+		//
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.SetElementAttribute = function( element, attributeName, configPath, sourceDb )
+		{
+			var data = sourceDb.select( configPath );
+			if( data.length == 1 ) {
+				element.attr( attributeName, data[0].value );
 			}
 		}
 		
@@ -193,10 +187,12 @@ var UICreator = (function() {
 									
 									// Has this element type registered a set properties function?
 									if( mySetPropertiesFunction[currElem.type] ) {
+										// Call setter function with default & current config as SpahQL objects.
 										mySetPropertiesFunction[currElem.type](
 											{
 												elementId: elementId,
-												elementConfig: currElem
+												elementConfig: SpahQL.db( currElem ),
+												defaultConfig: SpahQL.db( template )
 											}
 										);
 									}

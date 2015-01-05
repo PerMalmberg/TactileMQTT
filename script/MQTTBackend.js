@@ -53,27 +53,27 @@ var MQTTBackend = (function() {
 		{
 			if( IsConnected() ) {
 
-					if( topic ) {
-						if( message ) {
-							try {
-								var msg = new Paho.MQTT.Message( message );
-								msg.destinationName = topic;
-								msg.qos = 2;
-								client.send( msg );
-								}
-							catch( err ) {
-								console.log( "Failed to send message" );
-								Disconnect();
-								SetupReconnect();
+				if( topic ) {
+					if( message ) {
+						try {
+							var msg = new Paho.MQTT.Message( message );
+							msg.destinationName = topic;
+							msg.qos = 2;
+							client.send( msg );
 							}
+						catch( err ) {
+							console.log( "Failed to send message" );
+							Disconnect();
+							SetupReconnect();
 						}
-						else {
-							console.log( "Cannot send undefined/empty messages" );
-						}						
 					}
 					else {
-						console.log( "Cannot send undefined/empty topics" );
-					}				
+						console.log( "Cannot send undefined/empty messages" );
+					}						
+				}
+				else {
+					console.log( "Cannot send undefined/empty topics" );
+				}				
 			}
 		}
 
@@ -102,6 +102,16 @@ var MQTTBackend = (function() {
 			if( mySubscribedTopics.indexOf( topic ) === -1 ) {
 				mySubscribedTopics.push( topic );
 			}			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.Reset = function()
+		{
+			Disconnect();
+			AttemptConnection();
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////

@@ -6,8 +6,6 @@
 		function LoadTactileMenu( uiData )
 		{		
 			var self = $( uiData.elementId ); 
-			UICreator.Instance().ApplyDefaultProperties( self, uiData.templateConfig.properties );
-			UICreator.Instance().ApplyConfiguredProperties( self, uiData.elementConfig.properties );
 			
 			// Loop the pages and build  menu with links to other pages.
 			var cfg = UICreator.Instance().GetConfig();
@@ -36,6 +34,31 @@
 			}
 		}
 		
+		
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		////////////////////////////////////////////////////////////////////////////////
+		function ApplyDefaultTactileMenuConfig( element, configDb )
+		{	
+			UICreator.Instance().SetElementAttribute( element, "data-role", "/data-role/default", configDb );
+			UICreator.Instance().SetElementAttribute( element, "data-theme", "/data-theme/default", configDb );
+			UICreator.Instance().SetElementAttribute( element, "data-fullscreen", "/data-fullscreen/default", configDb );
+			UICreator.Instance().SetElementAttribute( element, "data-position", "/data-position/default", configDb );
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		////////////////////////////////////////////////////////////////////////////////
+		function ApplyTactileMenuConfig( element, configDb )
+		{
+			UICreator.Instance().SetElementAttribute( element, "data-role", "/data-role", configDb );
+			UICreator.Instance().SetElementAttribute( element, "data-theme", "/data-theme", configDb );
+			UICreator.Instance().SetElementAttribute( element, "data-fullscreen", "/data-fullscreen", configDb );
+			UICreator.Instance().SetElementAttribute( element, "data-position", "/data-position", configDb );
+		}
+		
 		////////////////////////////////////////////////////////////////////////////////
 		//
 		//
@@ -48,11 +71,17 @@
 			
 			var toFind = ".tactileMenuFor" + hash;
 			
-			// Find the menu to show.
+			// Find and show the menu.
 			$( toFind ).find( "#container" ).show();			
 		}
 		
-		UICreator.Instance().RegisterInit( "tactilemenu", LoadTactileMenu );		
+		UICreator.Instance().RegisterInit( "tactilemenu", LoadTactileMenu );
+
+		UICreator.Instance().RegisterSetProperties( "tactilemenu", function( uiData ) {		
+				var self = $( uiData.elementId );			
+				ApplyDefaultTactileMenuConfig( self, uiData.defaultConfig.select( "/properties" ) );
+				ApplyTactileMenuConfig( self, uiData.elementConfig.select( "/properties" ) );			
+			});		
 </script>
 <div class="tactileElement tactileMenu">
 	<div style="text-align: center;" id="container"></div>
