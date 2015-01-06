@@ -38,11 +38,11 @@
 				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
 			}
 			
-			var StartEdit = function( elementId ) {
+			var StartCheckBoxEdit = function( elementId ) {
 				$( elementId ).checkboxradio( "disable" );
 			}
 			
-			var EndEdit = function( elementId ) {
+			var EndCheckBoxEdit = function( elementId ) {
 				$( elementId ).checkboxradio( "enable" );
 			}
 					
@@ -58,11 +58,12 @@
 
 			UICreator.Instance().RegisterInit( "checkbox", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendCheckbox );
-				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartEdit, EndEdit ) );
+				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartCheckBoxEdit, EndCheckBoxEdit ) );
 			});
 			
 			UICreator.Instance().RegisterSetProperties( "checkbox", function( uiData ) {
 				var self = $( uiData.elementId );
+				
 				var cell = self.parent();
 				var label = $( ".checkBoxLabel", cell );
 				

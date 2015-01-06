@@ -8,6 +8,8 @@ var UICreator = (function() {
 	var mySetPropertiesFunction = {};
 	var pageNavigationSubscribers = {};
 	var myCurrentPage = null;
+	var templateReader = new ConfigurationReader();
+	var htmlReader = new HTMLReader();
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -16,7 +18,7 @@ var UICreator = (function() {
 	function UICreatorConstructor() {
 	
 		var elementsCreated = false;
-		var myCfg = new ConfigurationReader();
+		var myCfg = null;
 		var myElements = [];
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -49,15 +51,31 @@ var UICreator = (function() {
 	    //
 	    //
 	    ///////////////////////////////////////////////////////////////////////////////////
+		this.Init = function( configurationReader )
+		{
+			myCfg = configurationReader;
+		}
+			
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.GetConfig = function()
+		{
+			return myCfg;
+		}
+			
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
 		this.BuildPages = function()
 		{
 			// Only allow one call per page-load
 			if( !elementsCreated ) {
 				elementsCreated = true;
 
-				if( ReadConfig() ) {					
-					var templateReader = new ConfigurationReader();
-					var htmlReader = new HTMLReader();
+				if( ReadConfig() ) {										
 					var pages = myCfg.GetPath( "page.pages" );
 					for( var currPage = 0; currPage < pages.length; ++currPage ) {
 						CreatePage( pages[currPage], templateReader, htmlReader );
@@ -71,9 +89,12 @@ var UICreator = (function() {
 			}
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
 		this.AddNewElement = function( elementType, xPos, yPos )
 		{
-			debugger;
 			// Find the current page in the configuration
 			var db = SpahQL.db( myCfg.GetConfig() );
 			var query = "/page/pages/*[/pageName == '" + myCurrentPage + "']";
@@ -90,7 +111,7 @@ var UICreator = (function() {
 					var newCfg = {
 						type : elementType,
 						properties : {
-							id : (new Date().getTime()).toString() // Create a new unique id.
+							id : new Date().getTime() // Create a new unique id.
 						},
 						position : {
 							top: yPos,
@@ -111,10 +132,23 @@ var UICreator = (function() {
 					currPage.value().elements.push( newCfg );
 					
 					// Create the view
+					var templateInfo = FindElementTemplate( elementType );
+					CreateElementFromTemplate( templateInfo, templateReader, htmlReader, myCurrentPage, newCfg );
+					// Hook up MQTT
+					MQTTBinder.Instance().Rebind();
+					
+					$( "#" + myCurrentPage ).trigger( 'create' );
 				}
-			}	
-			
-			
+			}
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.GetCurrentPage = function()
+		{
+			return myCurrentPage;
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -139,16 +173,7 @@ var UICreator = (function() {
 		{
 			pageNavigationSubscribers[elementId] = func;
 		}
-		
-		///////////////////////////////////////////////////////////////////////////////////
-	    //
-	    //
-	    ///////////////////////////////////////////////////////////////////////////////////
-		this.GetConfig = function()
-		{
-			return myCfg;
-		}
-				
+			
 		///////////////////////////////////////////////////////////////////////////////////
 	    //
 	    //
@@ -166,7 +191,7 @@ var UICreator = (function() {
 						defaultConfig: SpahQL.db( defaultConfig )
 					}
 				);
-			}
+			}			
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -180,8 +205,25 @@ var UICreator = (function() {
 		this.SetElementAttribute = function( element, attributeName, configPath, sourceDb )
 		{
 			var data = sourceDb.select( configPath );
-			if( data.length == 1 ) {
+			if( data.length == 1 && typeof data[0].value != 'undefined' ) {
 				element.attr( attributeName, data[0].value );
+			}
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    // element is a pre-selected element
+		// attribute is the name of the attribute to set on the 'element'
+		// configPath is the path to where the data is found in the 'sourceDb'
+		// sourceDb is a SpahQL object
+		//
+	    ///////////////////////////////////////////////////////////////////////////////////
+		this.SetElementData = function( element, attributeName, configPath, sourceDb )
+		{
+			var data = sourceDb.select( configPath );
+			if( data.length == 1 && typeof data[0].value != 'undefined' ) {
+			
+				element.data( attributeName, data[0].value );
 			}
 		}
 		
@@ -210,57 +252,9 @@ var UICreator = (function() {
 					var currElem = pageData.elements[i];
 						
 					// Search for the template data files.
-					var templateData = FindElementTemplate( currElem.type );
+					var templateInfo = FindElementTemplate( currElem.type );
 					
-					if( templateData ) {						
-						if( templateReader.Read( "elements/" + templateData.elementName + ".json" ) ) {
-							if( htmlReader.Read( "elements/" + templateData.elementName + ".html" ) ) {
-								var template = templateReader.GetPath( currElem.type );
-								if( template ) {
-									var elementId = CreateElement( pageName, template, htmlReader.Get(), currElem );
-									
-                                    // Set an attribute enabling the EditManager to determine what type this element is.
-                                    $( elementId ).attr( "tactileEditType", currElem.type );
-
-																
-									// Has this element type registered an initialization function?									
-									if( myInitFunctions[currElem.type] ) {
-										myInitFunctions[currElem.type]( 
-											{ 
-												elementId: elementId,
-												currentPage: pageName,
-												elementConfig: currElem,
-												templateConfig: template
-											}
-										);
-									}
-									
-									// Has this element type registered a set properties function?
-									if( mySetPropertiesFunction[currElem.type] ) {
-										// Call setter function with default & current config as SpahQL objects.
-										mySetPropertiesFunction[currElem.type](
-											{
-												elementId: elementId,
-												elementConfig: SpahQL.db( currElem ),
-												defaultConfig: SpahQL.db( template )
-											}
-										);
-									}
-									
-									$( elementId ).trigger( "create" );
-								}
-								else {
-									console.log( "Could not get template for '" + currElem.type + "'" );
-								}
-							}
-							else {
-								console.log( "Could not read HTML template for '" + currElem.type + "'" );
-							}
-						}
-					}
-					else {
-						console.log( "Could not find a matching template file for element type '" + currElem.type + "'" );
-					}
+					CreateElementFromTemplate( templateInfo, templateReader, htmlReader, pageName, currElem );					
 				}
 			
 				// Lastly trigger the create event on the page to make sure all elements are initialized.
@@ -268,6 +262,63 @@ var UICreator = (function() {
 			}
 			else {
 				console.log( "Page does not contain pageName and/or elements" );
+			}
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+	    //
+	    //
+	    ///////////////////////////////////////////////////////////////////////////////////
+		var CreateElementFromTemplate = function( templateInfo, templateReader, htmlReader, pageName, elementConfig )
+		{
+			if( templateInfo ) {						
+				if( templateReader.Read( "elements/" + templateInfo.elementName + ".json" ) ) {
+					if( htmlReader.Read( "elements/" + templateInfo.elementName + ".html" ) ) {
+						var template = templateReader.GetPath( templateInfo.elementName );
+						if( template ) {
+							var elementId = CreateElement( pageName, template, htmlReader.Get(), elementConfig );
+							
+							// Set an attribute enabling the EditManager to determine what type this element is.
+							$( elementId ).attr( "tactileEditType", elementConfig.type );
+
+														
+							// Has this element type registered an initialization function?									
+							if( myInitFunctions[elementConfig.type] ) {
+								myInitFunctions[elementConfig.type]( 
+									{ 
+										elementId: elementId,
+										currentPage: pageName,
+										elementConfig: elementConfig,
+										templateConfig: template
+									}
+								);
+							}
+							
+							// Has this element type registered a set properties function?
+							if( mySetPropertiesFunction[elementConfig.type] ) {
+								// Call setter function with default & current config as SpahQL objects.
+								mySetPropertiesFunction[elementConfig.type](
+									{
+										elementId: elementId,
+										elementConfig: SpahQL.db( elementConfig ),
+										defaultConfig: SpahQL.db( template )
+									}
+								);
+							}
+							
+							$( elementId ).trigger( "create" );
+						}
+						else {
+							console.log( "Could not get template for '" + elementConfig.type + "'" );
+						}
+					}
+					else {
+						console.log( "Could not read HTML template for '" + elementConfig.type + "'" );
+					}
+				}
+			}
+			else {
+				console.log( "Could not find a matching template file for element type '" + elementConfig.type + "'" );
 			}
 		}
 				

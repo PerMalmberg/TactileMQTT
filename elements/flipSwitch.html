@@ -12,14 +12,24 @@
 			Must be the same as the 'tactileElementType'-parameter in the respective calls.
 	
 	-->
-	<input 
-		class="tactileElement mqttSubscriber"
-		type="checkbox" 
-		data-role="flipswitch"
-		mqttDataType="boolean"
-		tactileElementType="flipswitch"/>
-	<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;" width="16" height="16"/>
-	<image src="image/icon-settings.png" class="tactileEditHandle" style="visibility: hidden;" width="16" height="16"/>
+	<div class="elementTable">
+		<div class="element-row">
+			<div class="element-cell">
+				<input 
+					class="tactileElement mqttSubscriber"
+					type="checkbox" 
+					data-role="flipswitch"
+					mqttDataType="boolean"
+					tactileElementType="flipswitch"/>
+			</div>
+			<div class="element-cell">
+				<image src="image/icon-drag.png" class="tactileDragHandle" style="visibility: hidden;" width="16" height="16"/>
+			</div>
+			<div class="element-cell">
+				<image src="image/icon-settings.png" class="tactileEditHandle" style="visibility: hidden;" width="16" height="16"/>
+			</div>
+		</div>
+	</div>
 </div>
 <script type="text/javascript">
 			var SendFlipswitch = function()
@@ -27,11 +37,11 @@
 				MQTTBackend.Instance().Publish( $( this ).attr( 'mqttTopic' ), this.checked ? 'true' : 'false' );
 			}
 			
-			var StartEdit = function( elementId ) {
+			var StartFlipswitchEdit = function( elementId ) {
 				$( elementId ).flipswitch( "disable" );
 			}
 			
-			var EndEdit = function( elementId ) {
+			var EndFlipswitchEdit = function( elementId ) {
 				$( elementId ).flipswitch( "enable" );
 			}
 			
@@ -49,7 +59,7 @@
 			UICreator.Instance().RegisterInit( "flipswitch", function( uiData ) {
 				$( uiData.elementId ).on( 'change', SendFlipswitch );			
 				// Register start/end edit functions 
-				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartEdit, EndEdit ) );
+				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartFlipswitchEdit, EndFlipswitchEdit ) );
 			});
 			
 			UICreator.Instance().RegisterSetProperties( "flipswitch", function( uiData ) {		
@@ -61,20 +71,20 @@
 				UICreator.Instance().SetElementAttribute( self, "data-theme", "/properties/data-theme/default", uiData.defaultConfig );
 				
 				try {
-					self.flipswitch( "option", "offText", uiData.defaultConfig.select( "/properties/data-on-text/default" )[0].value );
-					self.flipswitch( "option", "onText", uiData.defaultConfig.select( "properties/data-off-text/default" )[0].value );
+					self.flipswitch( "option", "offText", uiData.defaultConfig.select( "/properties/data-off-text/default" )[0].value );
+					self.flipswitch( "option", "onText", uiData.defaultConfig.select( "properties/data-on-text/default" )[0].value );
 				}
 				catch(e) {}
 				
 				
-				// Current props
+				// Current props			
 				UICreator.Instance().SetElementAttribute( self, "mqttTopic", "/properties/mqtttopic", uiData.elementConfig );
 				UICreator.Instance().SetElementAttribute( self, "data-mini", "/properties/data-mini", uiData.elementConfig );
 				UICreator.Instance().SetElementAttribute( self, "data-theme", "/properties/data-theme", uiData.elementConfig );
 				
 				try {
-					self.flipswitch( "option", "offText", uiData.elementConfig.select( "/properties/data-on-text/default" )[0].value );
-					self.flipswitch( "option", "onText", uiData.elementConfig.select( "properties/data-off-text/default" )[0].value );
+					self.flipswitch( "option", "offText", uiData.elementConfig.select( "/properties/data-off-text" )[0].value );
+					self.flipswitch( "option", "onText", uiData.elementConfig.select( "properties/data-on-text" )[0].value );
 				}
 				catch(e) {}
 			});

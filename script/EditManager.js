@@ -15,7 +15,7 @@ var EditManager = (function() {
 	var currentEditElementConfig = null;
 	var currentEditElementId = 0;
 	var currentEditTemplate = null;
-	var myCfg = null;
+	var myElementIndex = null;
 	
 	
 	var myEditableElements = [];
@@ -27,15 +27,17 @@ var EditManager = (function() {
 	///////////////////////////////////////////////////////////////////////////////////
 	function EditManagerConstructor()
 	{
-		myCfg = new ConfigurationReader();
-		myCfg.Read( "elements/element-index.json" );
+		myElementIndex = new ConfigurationReader();
+		myElementIndex.Read( "elements/element-index.json" );
 	
 	    this.ToggleEdit = function()
 		{
 			// Find the position elements
 		
 			if( myEditEnabled ) {
-				DisableEdit();				
+				DisableEdit();
+				// Download the new config file
+				Download();
 			}
 			else {		
 				EnableEdit();
@@ -100,35 +102,7 @@ var EditManager = (function() {
 		this.Init = function( configurationReader )
 		{
 			myConfig = configurationReader;
-			BindEditTrigger();			
-		}
-		
-		///////////////////////////////////////////////////////////////////////////////////
-		//
-		//
-		///////////////////////////////////////////////////////////////////////////////////
-		this.RegisterEditableElement = function( editableElement )
-		{
-			myEditableElements.push( editableElement );
-		}
-		
-		///////////////////////////////////////////////////////////////////////////////////
-		//
-		//
-		///////////////////////////////////////////////////////////////////////////////////
-		var BindEditTrigger = function()
-		{
-			// Use event namespacing to be able to remove only this handler.
-			$( 'body' ).on( 'taphold.editManager', function() {
-				if( !myEditEnabled ) {
-					if( confirm( "Enable edit mode?" ) ) {
-						EditManager.Instance().ToggleEdit();
-					}
-				}
-				else if( confirm( "Disable edit mode?" ) ) {
-					EditManager.Instance().ToggleEdit();
-				}
-			});
+			BindEditTrigger();
 			
 			// Custom menu based on StackOverflow answer: http://stackoverflow.com/questions/4495626/making-custom-right-click-context-menus-for-my-web-app 
 			$( document ).bind( "contextmenu", function( event ) {
@@ -158,9 +132,37 @@ var EditManager = (function() {
 				// If the clicked element is not the menu
 				if( $( e.target ).parents( ".editManager-menu" ).length == 0) {					
 					// Hide it
-					$(".editManager-menu").hide(100);
+					$(".editManager-menu").hide( 100 );
 				}
-			});			
+			});	
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		this.RegisterEditableElement = function( editableElement )
+		{
+			myEditableElements.push( editableElement );
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		var BindEditTrigger = function()
+		{
+			// Use event namespacing to be able to remove only this handler.
+			$( 'body' ).on( 'taphold.editManager', function() {
+				if( !myEditEnabled ) {
+					if( confirm( "Enable edit mode?" ) ) {
+						EditManager.Instance().ToggleEdit();
+					}
+				}
+				else if( confirm( "Disable edit mode?" ) ) {
+					EditManager.Instance().ToggleEdit();
+				}
+			});		
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -172,8 +174,8 @@ var EditManager = (function() {
 			var menu = $( ".editManager-menu" );
 			menu.empty();
 			
-			if( myCfg.IsValid() ) {						
-				var elements = myCfg.GetPath( "elements" );
+			if( myElementIndex.IsValid() ) {						
+				var elements = myElementIndex.GetPath( "elements" );
 				for( var item in elements ) {
 					AddElementMenu( elements[item].elementName, elements[item].description );
 				}
@@ -211,6 +213,8 @@ var EditManager = (function() {
 		{
 			// Add an instance of the provided element type to the current page.
 			UICreator.Instance().AddNewElement( elementType, editMenuPos.X, editMenuPos.Y );
+			DisableEdit();
+			EnableEdit();
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -243,9 +247,6 @@ var EditManager = (function() {
 			
 			// Unbind edit property handler
 			$( '.tactileEditHandle' ).off( 'click.editProperties' );
-			
-			// Download the new config file
-			Download();
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////
@@ -401,6 +402,10 @@ var EditManager = (function() {
 			$( table ).find( "#editDialogCancel" ).on( "click", RemoveEditRepsonseFunctions );
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		///////////////////////////////////////////////////////////////////////////////////
 		var ApplyNewConfig = function()
 		{
 			RemoveEditRepsonseFunctions();			
