@@ -57,6 +57,7 @@
 			);
 			
 			UICreator.Instance().RegisterInit( "flipswitch", function( uiData ) {
+				$( uiData.elementId ).flipswitch();
 				$( uiData.elementId ).on( 'change', SendFlipswitch );			
 				// Register start/end edit functions 
 				EditManager.Instance().RegisterEditableElement( new EditableElement( uiData.elementId, StartFlipswitchEdit, EndFlipswitchEdit ) );
@@ -70,22 +71,23 @@
 				UICreator.Instance().SetElementAttribute( self, "data-mini", "/properties/data-mini/default", uiData.defaultConfig );
 				UICreator.Instance().SetElementAttribute( self, "data-theme", "/properties/data-theme/default", uiData.defaultConfig );
 				
-				try {
-					self.flipswitch( "option", "offText", uiData.defaultConfig.select( "/properties/data-off-text/default" )[0].value );
-					self.flipswitch( "option", "onText", uiData.defaultConfig.select( "/properties/data-on-text/default" )[0].value );
-				}
-				catch(e) {}
-				
+				self.flipswitch( "option", "offText", uiData.defaultConfig.select( "/properties/data-off-text/default" )[0].value );
+				self.flipswitch( "option", "onText", uiData.defaultConfig.select( "/properties/data-on-text/default" )[0].value );
 				
 				// Current props			
 				UICreator.Instance().SetElementAttribute( self, "mqttTopic", "/properties/mqtttopic", uiData.elementConfig );
 				UICreator.Instance().SetElementAttribute( self, "data-mini", "/properties/data-mini", uiData.elementConfig );
 				UICreator.Instance().SetElementAttribute( self, "data-theme", "/properties/data-theme", uiData.elementConfig );
 				
-				try {
-					self.flipswitch( "option", "offText", uiData.elementConfig.select( "/properties/data-off-text" )[0].value );
-					self.flipswitch( "option", "onText", uiData.elementConfig.select( "/properties/data-on-text" )[0].value );
+				// The checks for text are actually for old configs; newly created ones are guaranteed to have the properties.
+				var text = uiData.elementConfig.select( "/properties/data-off-text" );
+				if( text && text.length == 1 ) {
+					self.flipswitch( "option", "offText", text[0].value );
 				}
-				catch(e) {}
+				
+				text = uiData.elementConfig.select( "/properties/data-on-text" );
+				if( text && text.length == 1 ) {
+					self.flipswitch( "option", "onText", text[0].value );
+				}
 			});
 </script>
