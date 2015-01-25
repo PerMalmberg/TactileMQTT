@@ -59,6 +59,8 @@ var MQTTBackend = (function() {
 							var msg = new Paho.MQTT.Message( message );
 							msg.destinationName = topic;
 							msg.qos = 2;
+							msg.retained = true;
+							
 							client.send( msg );
 							}
 						catch( err ) {
